@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ee4d2d;
+  --color-secondary: #000000a6;
+}
 
 html {
   height: 100%;

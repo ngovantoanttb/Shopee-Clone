@@ -22,7 +22,6 @@ export default function useRouteElements() {
       path: '/register',
       element: (
         <RegisterLayout>
-          {' '}
           <Register />
         </RegisterLayout>
       )
