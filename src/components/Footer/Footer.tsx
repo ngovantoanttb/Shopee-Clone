@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className='pt-16 pb-8 text-secondary  bg-neutral-100'>
-      <div className='max-w-7xl mx-auto px-4'>
+    <footer className='pt-16 pb-8 text-secondary bg-neutral-100'>
+      <div className='max-w-7xl mx-auto'>
         <div className='grid grid-cols-1 lg:grid-cols-5 gap-12 text-xs mb-6'>
           <div>
             <div className='font-bold uppercase'>DỊCH VỤ KHÁCH HÀNG</div>

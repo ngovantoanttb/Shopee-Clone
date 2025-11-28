@@ -5,6 +5,13 @@
   --color-secondary: #000000a6;
 }
 
+@layer utilities {
+  .bg-primary-gradient {
+    background: linear-gradient(-180deg, #f53d2d, #ff6633);
+  }
+}
+
+
 html {
   height: 100%;
   line-height: 1.2;

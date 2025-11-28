@@ -10,7 +10,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        
       }
     }
   },
@@ -26,6 +25,6 @@ module.exports = {
         }
       })
     }),
-    require('@tailwindcss/line-clamp')
+    require('@tailwindcss')
   ]
 }

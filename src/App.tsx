@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import useRouteElements from "./useRouteElements";
 
 function App() {
@@ -5,6 +6,7 @@ function App() {
   return (
     <div>
       {routeElements}
+      <ToastContainer />
     </div>
   )
 }
