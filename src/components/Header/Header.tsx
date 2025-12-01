@@ -42,13 +42,13 @@ export default function Header() {
   
   return (
     <div className='bg-primary-gradient pb-5 pt-2 text-white'>
-      <div className='max-w-7xl mx-auto'>
+      <div className='max-w-5xl mx-auto'>
         <div className='flex justify-between items-center text-sm'>
           <div className='flex items-center gap-4'>
             <span className='cursor-pointer'>Kênh Người Bán</span>
-            <span>|</span>
+            <span className='border-r-2 border-orange-200/30 h-4'></span>
             <span className='cursor-pointer'>Tải ứng dụng</span>
-            <span>|</span>
+            <span className='border-r-2 border-orange-200/30 h-4'></span>
             <span className='cursor-pointer flex items-center gap-1'>
               Kết nối
               <FontAwesomeIcon className='mx-1' icon={faFacebook} />
@@ -83,13 +83,11 @@ export default function Header() {
                       position: strategy,
                       top: y ?? 0,
                       left: x ?? 0,
-                      transformOrigin: middlewareData.arrow
-                        ? `${middlewareData.arrow.x}px top`
-                        : 'center top'  
+                      transformOrigin: middlewareData.arrow ? `${middlewareData.arrow.x}px top` : 'center top'
                     }}
-                    initial={{ opacity: 0, transform: 'scale(0)'}}
-                    animate={{ opacity: 1, transform: 'scale(1)'}}
-                    exit={{ opacity: 0, transform: 'scale(0)'}}
+                    initial={{ opacity: 0, transform: 'scale(0)' }}
+                    animate={{ opacity: 1, transform: 'scale(1)' }}
+                    exit={{ opacity: 0, transform: 'scale(0)' }}
                     transition={{ duration: 0.2 }}
                     className='bg-white shadow-lg w-40 z-50 text-black p-2 rounded-sm'
                   >

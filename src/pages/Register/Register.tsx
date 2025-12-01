@@ -8,6 +8,7 @@ import { registerAccount } from 'src/types/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ResponseApi } from 'src/types/utils.type'
+import images from 'src/assets'
 
 type FormData = Schema
 
@@ -57,7 +58,7 @@ export default function Register() {
       <div className='flex justify-center items-center flex-col'>
         <div className='relative w-[1040px]'>
           <img
-            src='https://down-vn.img.susercontent.com/file/sg-11134004-7rcdu-m6hs9t6ff10y6b'
+            src={images.banner}
             className='h-[600px] w-[1040px]'
             alt='Shopee Background'
           />

@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { LoginAccount } from 'src/types/auth.api'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ResponseApi } from 'src/types/utils.type'
+import images from 'src/assets'
 
 type FormData = Omit<Schema, 'confirm_password'>
 
@@ -56,7 +57,7 @@ export default function Login() {
       <div className='flex justify-center items-center flex-col'>
         <div className='relative w-[1040px]'>
           <img
-            src='https://down-vn.img.susercontent.com/file/sg-11134004-7rcdu-m6hs9t6ff10y6b'
+            src={images.banner}
             className='h-[600px] w-[1040px]'
             alt='Shopee Background'
           />
@@ -77,7 +78,7 @@ export default function Login() {
                   name='password'
                   register={register}
                   type='password'
-                  className='mt-8'
+                  className='mt-4'
                   errorMessage={errors.password?.message}
                   placeholder='Password'
                 />
