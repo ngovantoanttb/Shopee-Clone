@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from 'src/utils/rules'
@@ -7,12 +7,15 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from 'src/types/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
-import { ResponseApi } from 'src/types/utils.type'
+import { ErrorResponse } from 'src/types/utils.type'
 import images from 'src/assets'
+import Button from 'src/components/Button'
+import path from 'src/constants/path'
 
 type FormData = Schema
 
 export default function Register() {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -28,11 +31,11 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
-      onSuccess: (data) => {
-        console.log(data)
+      onSuccess: () => {
+        navigate(path.login)
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
@@ -57,11 +60,7 @@ export default function Register() {
     <div className='bg-primary'>
       <div className='flex justify-center items-center flex-col'>
         <div className='relative w-[1040px]'>
-          <img
-            src={images.banner}
-            className='h-[600px] w-[1040px]'
-            alt='Shopee Background'
-          />
+          <img src={images.banner} className='h-[600px] w-[1040px]' alt='Shopee Background' />
           <div className='absolute right-0 top-1/2 -translate-y-1/2 shadow-lg'>
             <form className='p-10 rounded bg-white shadow-sm w-[400px]' onSubmit={onSubmit} noValidate>
               <div className='text-2xl'>Đăng ký</div>
@@ -94,14 +93,18 @@ export default function Register() {
                 />
               </div>
               <div className='mt-2'>
-                <button className='cursor-pointer rounded w-full hover:bg-orange-600 text-center bg-primary shadow-[#00000017] text-white py-4 px-2 uppercase opacity-90 text-sm'>
-                  Đăng Ký
-                </button>
+                <Button
+                  isLoading={registerAccountMutation.isPending}
+                  disabled={registerAccountMutation.isPending}
+                  className=' hover:bg-orange-600 rounded w-full bg-primary shadow-[#00000017] text-white py-4 px-2 uppercase opacity-90 text-sm flex items-center justify-center'
+                >
+                  Đăng ký
+                </Button>
               </div>
               <div className='mt-8'>
                 <div className='flex items-center justify-center'>
                   <span className='text-gray-400'>Bạn đã có tài khoản?</span>
-                  <Link className='text-primary ml-1' to='/login'>
+                  <Link className='text-primary ml-1' to={path.login}>
                     Đăng nhập
                   </Link>
                 </div>

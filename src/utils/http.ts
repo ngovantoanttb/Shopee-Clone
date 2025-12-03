@@ -1,40 +1,72 @@
-import axios, { AxiosError, type AxiosInstance } from "axios";
-import HttpStatusCode from "src/constants/httpStatusCode.enum";
-import { toast } from "react-toastify";
+import axios, { AxiosError, type AxiosInstance } from 'axios'
+import HttpStatusCode from 'src/constants/httpStatusCode.enum'
+import { toast } from 'react-toastify'
+import { AuthResponse } from 'src/types/auth.type'
+import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfiletoLS } from './auth'
+import path from 'src/constants/path'
 
-class Http { 
-    instance: AxiosInstance;
-    constructor() { 
-        this.instance = axios.create({
-            baseURL: "https://api-ecom.duthanhduoc.com",
-            timeout: 10000,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        this.instance.interceptors.response.use(
-            function (response) {
-                if (response && response.data) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const data: any | undefined = response.data;
-                    const message = data?.message
-                    toast.success(message)
-                }
-                return response;
-            },
-            function (error: AxiosError) { 
-                if (error.response?.status === HttpStatusCode.UnprocessableEntity) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const data: any | undefined = error.response?.data;
-                    const message = data?.message || error.message;
-                    toast.error(message)
-                }
-                return Promise.reject(error);
-            }
-        )
-    }
+class Http {
+  instance: AxiosInstance
+  private accessToken: string
+
+  constructor() {
+    // Khởi tạo và lấy một lần khi F5
+    this.accessToken = getAccessTokenFromLS()
+
+    this.instance = axios.create({
+      baseURL: import.meta.env.VITE_API_URL,
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    this.instance.interceptors.request.use(
+      (config) => {
+        if (this.accessToken && config.headers) {
+          config.headers.authorization = this.accessToken
+          return config
+        }
+        return config
+      },
+      (error) => {
+        return Promise.reject(error)
+      }
+    )
+
+    this.instance.interceptors.response.use(
+      (response) => {
+        const { url } = response.config
+        if (url === path.login || url === path.register) {
+          const data = response.data as AuthResponse
+
+          this.accessToken = (response.data as AuthResponse).data.access_token
+          setAccessTokenToLS(this.accessToken)
+          setProfiletoLS(data.data.user)
+          toast.success((response.data as AuthResponse).message)
+
+        } else if (url === path.logout) {
+          this.accessToken = ''
+          clearLS()
+          toast.success((response.data as AuthResponse).message)
+        }
+        
+        return response
+      },
+
+      function (error: AxiosError) {
+        if (error.response?.status === HttpStatusCode.UnprocessableEntity) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data: any | undefined = error.response?.data
+          const message = data?.message || error.message
+          toast.error(message)
+        }
+        return Promise.reject(error)
+      }
+    )
+  }
 }
 
-const http = new Http().instance;
+const http = new Http().instance
 
-export default http;
+export default http
