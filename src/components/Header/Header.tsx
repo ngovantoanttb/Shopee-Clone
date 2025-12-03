@@ -11,7 +11,7 @@ import {
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import images from 'src/assets'
 import Popover from '../Popover'
-import { logoutAccount } from 'src/types/auth.api'
+import authApi from 'src/apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation } from '@tanstack/react-query'
@@ -20,7 +20,7 @@ import path from 'src/constants/path'
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AppContext)
   const logoutMutation = useMutation({
-    mutationFn: logoutAccount,
+    mutationFn: authApi.logoutAccount,
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)

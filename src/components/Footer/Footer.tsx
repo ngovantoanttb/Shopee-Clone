@@ -2,9 +2,9 @@ import images from 'src/assets'
 
 export default function Footer() {
   return (
-    <footer className='pt-16 pb-8 text-black bg-neutral-100'>
-      <div className='max-w-6xl mx-auto text-[12px]'>
-        <div>
+    <footer className='text-black bg-gray-100 border-t-4 border-primary'>
+      <div className='max-w-6xl mx-auto text-xs border-t border-gray-200 py-1'>
+        <div className='pt-16'>
           <div className='grid grid-cols-1 lg:grid-cols-5 gap-8 mb-6'>
             <div>
               <div className='font-bold uppercase'>DỊCH VỤ KHÁCH HÀNG</div>
@@ -191,43 +191,42 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className='text-black/65'>
-          <div className='uppercase flex items-center justify-center gap-4'>
-            <div className='boder-'>Chính sách bảo mật</div>
-            <span className='border-r-2 border-gray-200 h-4'></span>
-            <div className=''>Quy chế hoạt động</div>
-            <span className='border-r-2 border-gray-200 h-4'></span>
-            <div>Chính sách vận chuyển</div>
-            <span className='border-r-2 border-gray-200 h-4'></span>
-            <div>CHÍNH SÁCH TRẢ HÀNG VÀ HOÀN TIỀN</div>
+      </div>
+      <div className='text-black/65 bg-gray-200/30 py-6'>
+        <div className='uppercase flex items-center justify-center gap-4'>
+          <div className='boder-'>Chính sách bảo mật</div>
+          <span className='border-r-2 border-gray-200 h-4'></span>
+          <div className=''>Quy chế hoạt động</div>
+          <span className='border-r-2 border-gray-200 h-4'></span>
+          <div>Chính sách vận chuyển</div>
+          <span className='border-r-2 border-gray-200 h-4'></span>
+          <div>CHÍNH SÁCH TRẢ HÀNG VÀ HOÀN TIỀN</div>
+        </div>
+        <div className='flex items-center justify-center mt-6 gap-4'>
+          <div>
+            <img className='h-12' src={images.gov} alt='Bộ công thương' />
           </div>
-          <div className='flex items-center justify-center mt-6 gap-4'>
-            <div>
-              <img className='h-12' src={images.gov} alt='Bộ công thương' />
-            </div>
-            <div>
-              <img className='h-12' src={images.gov} alt='Bộ công thương' />
-            </div>
-            <div>
-              <img className='h-12' src={images.touch} alt='Xác thực thương mại điện tử' />
-            </div>
+          <div>
+            <img className='h-12' src={images.gov} alt='Bộ công thương' />
           </div>
-          <div className='text-center text-[12px]'>
-            <div>Công ty TNHH Shopee</div>
-            <div className='mt-6'>
-              Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Hà, Thành phố Hà Nội, Việt
-              Nam
-            </div>
-            <div className='mt-2'>
-              Chăm sóc khách hàng: Gọi tổng đài Shopee (miễn phí) hoặc Trò chuyện với Shopee ngay trên Trung tâm trợ
-              giúp
-            </div>
-            <div className='mt-2'>Chịu Trách Nhiệm Quản Lý Nội Dung: Nguyễn Bùi Anh Tuấn</div>
-            <div className='mt-2'>
-              Mã số doanh nghiệp: 0106773786 do Sở Kế hoạch và Đầu tư TP Hà Nội cấp lần đầu ngày 10/02/2015
-            </div>
-            <div className='mt-2'>© 2015 - Bản quyền thuộc về Công ty TNHH Shopee</div>
+          <div>
+            <img className='h-12' src={images.touch} alt='Xác thực thương mại điện tử' />
           </div>
+        </div>
+        <div className='text-center text-sm'>
+          <div>Công ty TNHH Shopee</div>
+          <div className='mt-6'>
+            Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Hà, Thành phố Hà Nội, Việt
+            Nam
+          </div>
+          <div className='mt-2'>
+            Chăm sóc khách hàng: Gọi tổng đài Shopee (miễn phí) hoặc Trò chuyện với Shopee ngay trên Trung tâm trợ giúp
+          </div>
+          <div className='mt-2'>Chịu Trách Nhiệm Quản Lý Nội Dung: Nguyễn Bùi Anh Tuấn</div>
+          <div className='mt-2'>
+            Mã số doanh nghiệp: 0106773786 do Sở Kế hoạch và Đầu tư TP Hà Nội cấp lần đầu ngày 10/02/2015
+          </div>
+          <div className='mt-2'>© 2015 - Bản quyền thuộc về Công ty TNHH Shopee</div>
         </div>
       </div>
     </footer>

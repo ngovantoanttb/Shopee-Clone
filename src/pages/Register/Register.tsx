@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from 'src/utils/rules'
 import Input from 'src/components/Input'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from 'src/types/auth.api'
+import authApi from 'src/apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponse } from 'src/types/utils.type'
@@ -25,7 +25,7 @@ export default function Register() {
     resolver: yupResolver(schema)
   })
   const registerAccountMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {
