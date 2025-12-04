@@ -2,16 +2,20 @@ import { faLocationDot, faStar, faTruck } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import images from 'src/assets'
+// import ProductRating from 'src/components/ProductRating'
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/types/utils.type'
 
 interface Props {
   product: ProductType
 }
-export default function Product({product}: Props) {
+export default function Product({ product }: Props) {
   return (
     <Link to={'/product'}>
-      <div className='bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 duration-150 overflow-hidden relative'>
+      <div
+        className='group bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 
+  duration-150 ease-out overflow-hidden relative border border-transparent'
+      >
         {/* Badge top */}
         <div className='absolute top-0 right-0 bg-orange-500 text-white text-xs px-2 py-0.5 rounded-br-md z-10'></div>
 
@@ -45,8 +49,8 @@ export default function Product({product}: Props) {
           </div>
 
           {/* Price */}
-          <div className='flex items-center gap-1 mt-1 flex-wrap min-h-[44px]'>
-            <span className='line-through text-gray-500 text-sm'>{formatCurrency(product.price_before_discount)}đ</span>
+          <div className='flex items-center mt-1 flex-wrap min-h-[48px]'>
+            <span className='line-through text-gray-500 text-sm mr-1'>{formatCurrency(product.price_before_discount)}đ</span>
             <span className='text-red-500 text-lg font-semibold'>{formatCurrency(product.price)}đ</span>
             {/* <span className='text-red-500 ml-1 bg-red-100 rounded text-xs px-1 py-0.5'>-34%</span> */}
           </div>
@@ -77,7 +81,8 @@ export default function Product({product}: Props) {
           </div> */}
 
           {/* Rating + Sold */}
-          <div className='flex items-center mt-2 text-xs'>
+          <div className='flex items-center mt-2 text-xs flex-wrap'>
+            {/* <ProductRating rating={product.rating}/> */}
             <div className='border bg-amber-200/40 p-1 rounded-md border-amber-300'>
               <FontAwesomeIcon icon={faStar} className='text-yellow-400 mr-1' />
               <span className='text-gray-700'>{product.rating}</span>
@@ -99,6 +104,12 @@ export default function Product({product}: Props) {
             </div>
           </div>
         </div>
+        {/* Hover Action Button */}
+        {/* <div
+          className='absolute bottom-0 left-0 w-full py-2 text-center text-white bg-orange-500 text-sm translate-y-full group-hover:translate-y-0 transition-all duration-200'
+        >
+          Tìm sản phẩm tương tự
+        </div> */}
       </div>
     </Link>
   )

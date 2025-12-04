@@ -1,79 +1,147 @@
-import { faChevronDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import classNames from 'classnames'
+import { sortBy, order as orderConstant } from 'src/constants/product'
+import { ProductListConfig } from 'src/types/product.type'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import path from 'src/constants/path'
+import omit from 'lodash/omit'
+import { QueryConfig } from '../ProductList'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-export default function SortProductList() {
-  const [active, setActive] = useState('newest')
+interface Props {
+  queryConfig: QueryConfig
+  pageSize: number
+}
+
+export default function SortProductList({ queryConfig, pageSize }: Props) {
+  const page = Number(queryConfig.page)
+  const { sort_by = sortBy.view, order } = queryConfig
+  const navigate = useNavigate()
+
+  const isActiveSortBy = (sortByValue: Exclude<ProductListConfig['sort_by'], undefined>) => {
+    return sort_by === sortByValue
+  }
+
+  const handleSort = (sortByValue: Exclude<ProductListConfig['sort_by'], undefined>) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(
+        omit(
+          {
+            ...queryConfig,
+            sort_by: sortByValue
+          },
+          ['order']
+        )
+      ).toString()
+    })
+  }
+
+  const handlePriceOrder = (orderValue: Exclude<ProductListConfig['order'], undefined>) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        sort_by: sortBy.price,
+        order: orderValue
+      }).toString()
+    })
+  }
+
   return (
-    <div className='pt-4'>
-      <div className='bg-gray-200/70 p-4 text-sm'>
-        <div className='flex flex-wrap items-center justify-between gap-2'>
-          <div className='flex items-center flex-wrap gap-2'>
-            <div className='text-gray-600'>Sắp xếp theo</div>
+    <div className='bg-gray-200/40 py-4 px-3 text-gray-600'>
+      <div className='flex flex-wrap items-center justify-between gap-2'>
+        <div className='flex flex-wrap items-center gap-2'>
+          <div>Sắp xếp theo</div>
+          <button
+            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer ', {
+              'bg-primary text-white': isActiveSortBy(sortBy.view),
+              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.view)
+            })}
+            onClick={() => handleSort(sortBy.view)}
+          >
+            Phổ biến
+          </button>
+          <button
+            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer ', {
+              'bg-primary text-white': isActiveSortBy(sortBy.createdAt),
+              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
+            })}
+            onClick={() => handleSort(sortBy.createdAt)}
+          >
+            Mới nhất
+          </button>
+          <button
+            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer ', {
+              'bg-primary text-white': isActiveSortBy(sortBy.sold),
+              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
+            })}
+            onClick={() => handleSort(sortBy.sold)}
+          >
+            Bán chạy
+          </button>
+          <select
+            className={classNames('h-8  px-4 text-left text-sm capitalize cursor-pointer  outline-none ', {
+              'bg-primary text-white': isActiveSortBy(sortBy.price),
+              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.price)
+            })}
+            value={order || ''}
+            onChange={(event) => handlePriceOrder(event.target.value as Exclude<ProductListConfig['order'], undefined>)}
+          >
+            <option value='' disabled className='bg-white'>
+              Giá
+            </option>
+            <option value={orderConstant.asc} className='bg-white'>
+              Giá: Thấp đến cao
+            </option>
+            <option value={orderConstant.desc} className='bg-white'>
+              Giá: Cao đến thấp
+            </option>
+          </select>
+        </div>
 
-            <button
-              className={`px-3 h-8 cursor-pointer rounded-xs ${
-                active === 'popular' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300'
-              }`}
-              onClick={() => setActive('popular')}
-            >
-              Phổ Biến
-            </button>
-
-            {/* Newest */}
-            <button
-              className={`px-3 h-8 cursor-pointer rounded-xs ${
-                active === 'newest' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300'
-              }`}
-              onClick={() => setActive('newest')}
-            >
-              Mới Nhất
-            </button>
-
-            {/* Best Selling */}
-            <button
-              className={`px-3 h-8 cursor-pointer rounded-xs ${
-                active === 'best' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300'
-              }`}
-              onClick={() => setActive('best')}
-            >
-              Bán Chạy
-            </button>
-            {/* Price Dropdown */}
-            <div className='relative'>
-              <select
-                className='h-8 w-50 px-3 rounded-xs bg-white cursor-pointer text-left
-                 border-none focus:border-none focus:ring-0 appearance-none'
-              >
-                <option value='' hidden>
-                  Giá
-                </option>
-                <option value='price:asc' className='hover:text-primary hover:bg-white'>
-                  Giá: Thấp đến Cao
-                </option>
-                <option value='price:desc' className='hover:text-primary hover:bg-white'>
-                  Giá: Cao đến Thấp
-                </option>
-              </select>
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none'
-              />
-            </div>
+        <div className='flex items-center'>
+          <div>
+            <span className='text-primary'>{page}</span>
+            <span>/{pageSize}</span>
           </div>
-          <div className='flex items-center gap-4 text-sm'>
-            <span>
-              <span className='text-primary font-semibold'>1</span>/9
-            </span>
-
-            <div className='flex rounded-xs overflow-hidden '>
-              <button className='px-3 h-8 bg-white text-gray-400'>
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
-              <button className='px-3 h-8 bg-white text-gray-700 border-l border-gray-200 cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronRight} />
-              </button>
-            </div>
+          <div className='ml-2 flex'>
+            {page === 1 ? (
+              <span className='flex h-8 w-9 text-gray-400 cursor-not-allowed items-center justify-center bg-white/60  shadow hover:bg-slate-100'>
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </span>
+            ) : (
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    page: (page - 1).toString()
+                  }).toString()
+                }}
+                className='flex h-8 w-9  items-center justify-center bg-white  shadow hover:bg-slate-100'
+              >
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </Link>
+            )}
+            {page === pageSize ? (
+              <span className='flex h-8 w-9 text-gray-400 cursor-not-allowed items-center justify-center bg-white/60  shadow hover:bg-slate-100'>
+                <FontAwesomeIcon icon={faAngleRight} />
+              </span>
+            ) : (
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    page: (page + 1).toString()
+                  }).toString()
+                }}
+                className='flex h-8 w-9  items-center justify-center bg-white  shadow hover:bg-slate-100'
+              >
+                <FontAwesomeIcon icon={faAngleRight} />
+              </Link>
+            )}
           </div>
         </div>
       </div>

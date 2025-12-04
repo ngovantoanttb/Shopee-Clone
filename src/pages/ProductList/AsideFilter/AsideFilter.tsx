@@ -1,12 +1,31 @@
 import { faCaretRight, faChevronDown, faFilter, faList, faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
-
 import path from 'src/constants/path'
+import { Category } from 'src/types/category.type'
+import { schema } from 'src/utils/rules'
+import { Schema, ObjectSchema } from 'yup'
+import { QueryConfig } from '../ProductList'
 
-export default function AsideFilter() {
+interface Props {
+  queryConfig: QueryConfig
+  categories: Category[]
+}
+
+/**
+ * Rule validate
+ * Nếu có price_min và price_max thì price_max >= price_min
+ * Còn không thì có price_min thì không có price_max và ngược lại
+ */
+
+const priceSchema = schema.pick(['price_min', 'price_max'])
+
+export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { category } = queryConfig
   return (
     <div className='pt-6 text-gray-800'>
       {/* Tất cả danh mục */}
@@ -16,26 +35,34 @@ export default function AsideFilter() {
           <span className='font-bold uppercase'>Tất Cả Danh Mục</span>
         </Link>
         <ul className='mt-4 text-sm'>
-          <li className='py-2 relative pl-4'>
-            <span className='absolute left-0 top-1/2 -translate-y-1/2'>
-              <FontAwesomeIcon icon={faCaretRight} className='text-primary' />
-            </span>
+          {categories.map((categoryItem) => {
+            const isActive = category === categoryItem._id
+            return (
+              <li className='py-2 relative pl-4' key={categoryItem._id}>
+                <Link
+                  to={{
+                    pathname: path.home,
+                    search: new URLSearchParams({
+                      ...queryConfig,
+                      category: categoryItem._id
+                    }).toString()
+                  }}
+                >
+                  {isActive ? (
+                    <div>
+                      <span className='absolute left-0 top-1/2 -translate-y-1/2'>
+                        <FontAwesomeIcon icon={faCaretRight} className='text-primary' />
+                      </span>
+                      <span className='block text-primary'>{categoryItem.name}</span>
+                    </div>
+                  ) : (
+                    <span className='block text-gray-700'>{categoryItem.name}</span>
+                  )}
+                </Link>
+              </li>
+            )
+          })}
 
-            <span className='block font-semibold text-primary'>Thời trang nam</span>
-          </li>
-
-          <li className='py-2 relative pl-4'>
-            <span>Áo Khoác</span>
-          </li>
-          <li className='py-2 relative pl-4'>
-            <span>Áo Vest và Blazer</span>
-          </li>
-          <li className='py-2 relative pl-4'>
-            <span>Áo Hoodie, Áo Len & Áo Nỉ</span>
-          </li>
-          <li className='py-2 relative pl-4'>
-            <span>Quần Jeans</span>
-          </li>
           <div className='py-2 relative pl-4 cursor-pointer'>
             <span>Thêm</span>
             <FontAwesomeIcon icon={faChevronDown} className='absolute ml-2 top-1/2 -translate-y-1/2' />

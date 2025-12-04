@@ -220,8 +220,13 @@ export default function Header() {
                 </>
               }
             >
-              <Link to='/login'>
+              <Link to='/cart' className='relative'>
                 <FontAwesomeIcon className='text-2xl' icon={faCartShopping} />
+                <span className='absolute -top-4 -right-3'>
+                  <span className='flex items-center justify-center w-6 h-4 text-xs bg-white text-primary rounded-full border border-primary'>
+                    3
+                  </span>
+                </span>
               </Link>
             </Popover>
           </div>
