@@ -50,7 +50,9 @@ export default function Product({ product }: Props) {
 
           {/* Price */}
           <div className='flex items-center mt-1 flex-wrap min-h-[48px]'>
-            <span className='line-through text-gray-500 text-sm mr-1'>{formatCurrency(product.price_before_discount)}đ</span>
+            <span className='line-through text-gray-500 text-sm mr-1'>
+              {formatCurrency(product.price_before_discount)}đ
+            </span>
             <span className='text-red-500 text-lg font-semibold'>{formatCurrency(product.price)}đ</span>
             {/* <span className='text-red-500 ml-1 bg-red-100 rounded text-xs px-1 py-0.5'>-34%</span> */}
           </div>
@@ -85,7 +87,7 @@ export default function Product({ product }: Props) {
             {/* <ProductRating rating={product.rating}/> */}
             <div className='border bg-amber-200/40 p-1 rounded-md border-amber-300'>
               <FontAwesomeIcon icon={faStar} className='text-yellow-400 mr-1' />
-              <span className='text-gray-700'>{product.rating}</span>
+              <span className='text-gray-700'>{product.rating.toFixed(1)}</span>
             </div>
             <span className='border border-gray-100 h-4 mx-2'></span>
             <span className='text-gray-700'>Đã bán {formatNumberToSocialStyle(product.sold)}</span>

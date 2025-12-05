@@ -64,7 +64,7 @@ export default function Login() {
     <div className='bg-primary'>
       <div className='flex justify-center items-center flex-col'>
         <div className='relative w-[1040px]'>
-          <img src={images.banner} className='h-[600px] w-[1040px]' alt='Shopee Background' />
+          <img src={images.login} className='h-[600px] w-[1040px]' alt='Shopee Background' />
 
           <div className='absolute right-0 top-1/2 -translate-y-1/2 shadow-lg'>
             <form className='p-10 rounded bg-white shadow-sm w-[400px]' onSubmit={onSubmit} noValidate>

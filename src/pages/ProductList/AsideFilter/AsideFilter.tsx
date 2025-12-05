@@ -1,4 +1,4 @@
-import { faCaretRight, faChevronDown, faFilter, faList, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faCaretRight, faChevronDown, faFilter, faList } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
@@ -11,6 +11,8 @@ import InputNumber from 'src/components/InputNumber'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { NoUndefinedField } from 'src/types/utils.type'
+import RatingStarts from '../RatingStarts'
+import { omit } from 'lodash'
 
 interface Props {
   queryConfig: QueryConfig
@@ -54,6 +56,13 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       }).toString()
     })
   })
+
+  const handleRemoveAll = () => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
+    })
+  }
 
   return (
     <div className='pt-6 text-gray-800'>
@@ -174,11 +183,10 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                       classNameInput='p-1 w-full outline-none border border-gray-300 rounded-sm focus:shadow-sm'
                       classNameError='hidden'
                       {...field}
-                      onChange={event => { 
+                      onChange={(event) => {
                         field.onChange(event)
                         trigger('price_max')
                       }}
-                      
                     />
                   )
                 }}
@@ -200,7 +208,6 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                         field.onChange(event)
                         trigger('price_min')
                       }}
-                      
                     />
                   )
                 }}
@@ -216,74 +223,11 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         {/* Đánh giá */}
         <div className='mt-4 text-sm space-y-1'>
           <div className='font-medium'>Đánh Giá</div>
-
-          {/* 5 sao */}
-          <li className='flex items-center hover:bg-gray-300 p-1 rounded-xl cursor-pointer'>
-            <ul className='text-amber-400 flex gap-1 ml-2'>
-              {Array(5)
-                .fill(0)
-                .map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} />
-                ))}
-            </ul>
-            <span className='ml-3 text-gray-700'></span>
-          </li>
-
-          {/* 4 sao */}
-          <li className='flex items-center hover:bg-gray-300 p-1 rounded-xl cursor-pointer'>
-            <div className='text-amber-400 flex gap-1 ml-2'>
-              {Array(4)
-                .fill(0)
-                .map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} />
-                ))}
-              <FontAwesomeIcon className='text-gray-500' icon={faStar} />
-            </div>
-            <span className='ml-3 text-gray-700'>trở lên</span>
-          </li>
-
-          {/* 3 sao */}
-          <li className='flex items-center hover:bg-gray-300 p-1 rounded-xl cursor-pointer'>
-            <div className='text-amber-400 flex gap-1 ml-2'>
-              {Array(3)
-                .fill(0)
-                .map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} />
-                ))}
-              {Array(2)
-                .fill(0)
-                .map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} className='text-gray-500' />
-                ))}
-            </div>
-            <span className='ml-3 text-gray-700'>trở lên</span>
-          </li>
-
-          {/* 2 sao */}
-          <li className='flex items-center hover:bg-gray-300 p-1 rounded-xl cursor-pointer'>
-            <div className='text-amber-400 flex gap-1 ml-2'>
-              {Array(2)
-                .fill(0)
-                .map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} />
-                ))}
-              {Array(3)
-                .fill(0)
-                .map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} className='text-gray-500' />
-                ))}
-            </div>
-            <span className='ml-3 text-gray-700'>trở lên</span>
-          </li>
-          {/* Nút Thêm */}
-          <div className='py-2 relative pl-4 cursor-pointer'>
-            <span>Thêm</span>
-            <FontAwesomeIcon icon={faChevronDown} className='absolute ml-2 top-1/2 -translate-y-1/2' />
-          </div>
+          <RatingStarts queryConfig={queryConfig} />
         </div>
       </div>
       <div className='w-full h-px bg-gray-300 my-6'></div>
-      <Button className=' hover:bg-orange-600 rounded w-full bg-primary shadow-[#00000017] text-white py-2 px-2 uppercase opacity-90 text-sm flex items-center justify-center'>
+      <Button onClick={handleRemoveAll} className=' hover:bg-orange-600 rounded w-full bg-primary shadow-[#00000017] text-white py-2 px-2 uppercase opacity-90 text-sm flex items-center justify-center'>
         Xóa tất cả
       </Button>
     </div>

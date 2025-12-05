@@ -22,6 +22,7 @@ import img6 from './image/6.png'
 import sale1 from './image/sale1.webp'
 import sale2 from './image/sale2.webp'
 import salebanner from './image/sale-banner.png'
+import login from './image/login.png'
 
 const images = {
   avt,
@@ -47,7 +48,8 @@ const images = {
   img6,
   sale1,
   sale2,
-  salebanner
+  salebanner,
+  login
 }
 
 export default images

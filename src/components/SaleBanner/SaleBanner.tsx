@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState, useRef, useEffect } from 'react'
 import IMAGES from 'src/assets'
 
+
 const MOCK_BANNERS = [
   {
     id: 1,
@@ -215,7 +216,7 @@ export default function SaleBanner() {
         </div>
       </div>
       
-      <div className='grid grid-cols-6 w-full px-4 gap-4'>
+      <div className='grid grid-cols-6 w-full px-4 gap-4 my-2'>
         {/* Item 1 */}
         <div className='flex flex-col items-center'>
           <img src={IMAGES.img1} className='w-12 h-12 object-cover' />
@@ -254,9 +255,9 @@ export default function SaleBanner() {
       </div>
 
       {/* Banner */}
-      <div className='mt-4'>
+      {/* <div className='mt-4'>
         <img src={IMAGES.salebanner} alt='Sale-banner' />
-      </div>
+      </div> */}
     </div>
   )
 }

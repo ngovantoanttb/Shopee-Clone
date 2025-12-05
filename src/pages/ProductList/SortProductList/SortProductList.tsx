@@ -49,41 +49,41 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
   }
 
   return (
-    <div className='bg-gray-200/40 py-4 px-3 text-gray-600'>
+    <div className='bg-gray-200/40 py-4 px-3'>
       <div className='flex flex-wrap items-center justify-between gap-2'>
         <div className='flex flex-wrap items-center gap-2'>
-          <div>Sắp xếp theo</div>
+          <div className='text-gray-600'>Sắp xếp theo</div>
           <button
-            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer ', {
+            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer font-light ', {
               'bg-primary text-white': isActiveSortBy(sortBy.view),
-              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.view)
+              'bg-white hover:bg-slate-200': !isActiveSortBy(sortBy.view)
             })}
             onClick={() => handleSort(sortBy.view)}
           >
             Phổ biến
           </button>
           <button
-            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer ', {
+            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer font-light ', {
               'bg-primary text-white': isActiveSortBy(sortBy.createdAt),
-              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
+              'bg-white hover:bg-slate-200': !isActiveSortBy(sortBy.createdAt)
             })}
             onClick={() => handleSort(sortBy.createdAt)}
           >
             Mới nhất
           </button>
           <button
-            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer ', {
+            className={classNames('h-8 px-4 text-center text-sm capitalize cursor-pointer font-light ', {
               'bg-primary text-white': isActiveSortBy(sortBy.sold),
-              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
+              'bg-white hover:bg-slate-200': !isActiveSortBy(sortBy.sold)
             })}
             onClick={() => handleSort(sortBy.sold)}
           >
             Bán chạy
           </button>
           <select
-            className={classNames('h-8  px-4 text-left text-sm capitalize cursor-pointer  outline-none ', {
+            className={classNames('h-8  px-4 text-left text-sm capitalize cursor-pointer font-light  outline-none ', {
               'bg-primary text-white': isActiveSortBy(sortBy.price),
-              'bg-white hover:bg-slate-100': !isActiveSortBy(sortBy.price)
+              'bg-white hover:bg-slate2100': !isActiveSortBy(sortBy.price)
             })}
             value={order || ''}
             onChange={(event) => handlePriceOrder(event.target.value as Exclude<ProductListConfig['order'], undefined>)}
