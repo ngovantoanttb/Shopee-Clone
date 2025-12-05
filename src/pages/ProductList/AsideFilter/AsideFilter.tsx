@@ -1,20 +1,23 @@
 import { faCaretRight, faChevronDown, faFilter, faList, faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
-import Input from 'src/components/Input'
 import path from 'src/constants/path'
 import { Category } from 'src/types/category.type'
-import { schema } from 'src/utils/rules'
-import { Schema, ObjectSchema } from 'yup'
 import { QueryConfig } from '../ProductList'
+import { Controller, useForm } from 'react-hook-form'
+import { Schema, schema } from 'src/utils/rules'
+import InputNumber from 'src/components/InputNumber'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { NoUndefinedField } from 'src/types/utils.type'
 
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
 }
+
+type FormData = NoUndefinedField<Pick<Schema, 'price_min' | 'price_max'>>
 
 /**
  * Rule validate
@@ -22,10 +25,36 @@ interface Props {
  * Còn không thì có price_min thì không có price_max và ngược lại
  */
 
-const priceSchema = schema.pick(['price_min', 'price_max'])
+const priceSchema = schema.pick(['price_min', 'price_max']) as yup.ObjectSchema<FormData>
 
 export default function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
+  const {
+    control,
+    handleSubmit,
+    trigger,
+    formState: { errors }
+  } = useForm<FormData>({
+    defaultValues: {
+      price_min: '',
+      price_max: ''
+    },
+    resolver: yupResolver(priceSchema),
+    shouldFocusError: false
+  })
+
+  const navigate = useNavigate()
+  const onSubmit = handleSubmit((data) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_min: data.price_min,
+        price_max: data.price_max
+      }).toString()
+    })
+  })
+
   return (
     <div className='pt-6 text-gray-800'>
       {/* Tất cả danh mục */}
@@ -131,31 +160,60 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
           <div className='py-2'>
             <span>Khoảng giá</span>
           </div>
-          <form className='mt-2'>
+          <form className='mt-2' onSubmit={onSubmit}>
             <div className='flex items-center'>
-              <Input
-                type='text'
-                name='from'
-                placeholder='₫ TỪ'
-                className='grow'
-                classNameInput='p-1 w-full outline-none border border-gray-300 rounded-sm focus:shadow-sm'
+              <Controller
+                control={control}
+                name='price_min'
+                render={({ field }) => {
+                  return (
+                    <InputNumber
+                      type='text'
+                      placeholder='₫ TỪ'
+                      className='grow'
+                      classNameInput='p-1 w-full outline-none border border-gray-300 rounded-sm focus:shadow-sm'
+                      classNameError='hidden'
+                      {...field}
+                      onChange={event => { 
+                        field.onChange(event)
+                        trigger('price_max')
+                      }}
+                      
+                    />
+                  )
+                }}
               />
-
-              <div className='w-8 h-px bg-gray-300 mx-2 self-center -translate-y-3'></div>
-
-              <Input
-                type='text'
-                name='to'
-                placeholder='₫ ĐẾN'
-                className='grow'
-                classNameInput='p-1 w-full outline-none border border-gray-300 rounded-sm focus:shadow-sm'
+              <div className='w-8 h-px bg-gray-300 mx-2 self-center -translate-y-0'></div>
+              <Controller
+                control={control}
+                name='price_max'
+                render={({ field }) => {
+                  return (
+                    <InputNumber
+                      type='text'
+                      placeholder='₫ ĐẾN'
+                      className='grow'
+                      classNameInput='p-1 w-full outline-none border border-gray-300 rounded-sm focus:shadow-sm'
+                      classNameError='hidden'
+                      {...field}
+                      onChange={(event) => {
+                        field.onChange(event)
+                        trigger('price_min')
+                      }}
+                      
+                    />
+                  )
+                }}
               />
             </div>
-            <Button className=' hover:bg-orange-600 rounded w-full bg-primary shadow-[#00000017] text-white py-2 px-2 uppercase opacity-90 text-sm flex items-center justify-center'>
+            <div className='my-1 text-red-400 text-sm min-h-[20px]'>{errors.price_min?.message}</div>
+            <Button className=' hover:bg-primary/90 rounded w-full bg-primary shadow text-white py-2 px-2 uppercase opacity-90 text-sm flex items-center justify-center'>
               Áp dụng
             </Button>
           </form>
         </div>
+
+        {/* Đánh giá */}
         <div className='mt-4 text-sm space-y-1'>
           <div className='font-medium'>Đánh Giá</div>
 

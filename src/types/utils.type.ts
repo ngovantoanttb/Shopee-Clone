@@ -16,6 +16,16 @@ export function formatNumberToSocialStyle(value: number) {
   return new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1
-  }).format(value).replace('.', ',').toLowerCase()
-
+  })
+    .format(value)
+    .replace('.', ',')
+    .toLowerCase()
 }
+
+// cú pháp `-?` sẽ loại bỏ undefiend của key optional
+export type NoUndefinedField<T> = {
+  [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>
+}
+
+
+
