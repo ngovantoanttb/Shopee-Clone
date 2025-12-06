@@ -138,7 +138,7 @@ export default function SaleBanner() {
 
   return (
     <div className='max-w-6xl mx-auto bg-gray-100'>
-      <div className='pt-10 pb-4 grid grid-cols-6 gap-1'>
+      <div className='pt-7 pb-4 grid grid-cols-6 gap-1'>
         <div className='col-span-4'>
           <div
             className='relative overflow-hidden hadow-lg z-10 select-none group cursor-pointer'

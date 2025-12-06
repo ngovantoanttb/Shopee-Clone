@@ -4,7 +4,7 @@ import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
 import { Category } from 'src/types/category.type'
-import { QueryConfig } from '../ProductList'
+import { QueryConfig } from '../../ProductList'
 import { Controller, useForm } from 'react-hook-form'
 import { Schema, schema } from 'src/utils/rules'
 import InputNumber from 'src/components/InputNumber'
@@ -227,7 +227,10 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
         </div>
       </div>
       <div className='w-full h-px bg-gray-300 my-6'></div>
-      <Button onClick={handleRemoveAll} className=' hover:bg-orange-600 rounded w-full bg-primary shadow-[#00000017] text-white py-2 px-2 uppercase opacity-90 text-sm flex items-center justify-center'>
+      <Button
+        onClick={handleRemoveAll}
+        className=' hover:bg-orange-600 rounded w-full bg-primary shadow-[#00000017] text-white py-2 px-2 uppercase opacity-90 text-sm flex items-center justify-center'
+      >
         Xóa tất cả
       </Button>
     </div>

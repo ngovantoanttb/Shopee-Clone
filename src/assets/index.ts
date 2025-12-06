@@ -1,4 +1,3 @@
-import avt from './image/avt.jpg'
 import banner from './image/banner.png'
 import gov from './image/gov.png'
 import touch from './image/touch.png'
@@ -23,8 +22,10 @@ import sale1 from './image/sale1.webp'
 import sale2 from './image/sale2.webp'
 import salebanner from './image/sale-banner.png'
 import login from './image/login.png'
+import security from './image/security.png'
+import avt from './image/avt-sp.jpg'
 
-const images = {
+export const images = {
   avt,
   banner,
   gov,
@@ -49,7 +50,8 @@ const images = {
   sale1,
   sale2,
   salebanner,
-  login
+  login,
+  security
 }
 
 export default images

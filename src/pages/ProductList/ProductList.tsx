@@ -1,7 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import AsideFilter from './AsideFilter'
-import Product from './Product/Product'
-import SortProductList from './SortProductList'
+import AsideFilter from './components/AsideFilter'
+import Product from './components/Product/Product'
 import productApi from 'src/apis/product.api'
 import useQueryParams from 'src/hooks/useQueryParams'
 import { ProductListConfig } from 'src/types/product.type'
@@ -10,6 +9,7 @@ import Pagination from 'src/components/Pagination'
 import categoryApi from 'src/apis/category.api'
 import SaleBanner from 'src/components/SaleBanner/SaleBanner'
 import ShopMall from 'src/components/ShopMall'
+import SortProductList from './components/SortProductList'
 
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string

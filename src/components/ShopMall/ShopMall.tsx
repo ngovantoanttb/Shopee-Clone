@@ -67,6 +67,7 @@ export default function ShopMall() {
       result.push(brands.slice(i, i + 12))
     }
     return result
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const totalPages = pages.length

@@ -2,16 +2,18 @@ import { faLocationDot, faStar, faTruck } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import images from 'src/assets'
+import path from 'src/constants/path'
 // import ProductRating from 'src/components/ProductRating'
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/types/utils.type'
+import { generateNameId } from 'src/utils/utils'
 
 interface Props {
   product: ProductType
 }
 export default function Product({ product }: Props) {
   return (
-    <Link to={'/product'}>
+    <Link to={`${path.home}${generateNameId({name: product.name, id:product._id})}`}>
       <div
         className='group bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 
   duration-150 ease-out overflow-hidden relative border border-transparent'

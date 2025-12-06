@@ -12,7 +12,7 @@ import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import images from 'src/assets'
 import Popover from '../Popover'
 import authApi from 'src/apis/auth.api'
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation } from '@tanstack/react-query'
 import path from 'src/constants/path'
@@ -61,8 +61,24 @@ export default function Header() {
       img: '/img/mockhoa2.jpg'
     }
   ]
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = ref.current
+    if (!container) return
+    const spans = Array.from(container.querySelectorAll('span'))
+    if (spans.length === 0) return
+    const firstTop = spans[0].offsetTop
+    spans.forEach((span) => {
+      if (span.offsetTop !== firstTop) {
+        span.style.display = 'none' // Ẩn span xuống dòng
+      }
+    })
+  }, [])
+
   return (
-    <div className='bg-primary-gradient pb-5 pt-2 text-white'>
+    <div className='bg-primary-gradient pb-6 pt-2 text-white'>
       <div className='max-w-6xl mx-auto'>
         <div className='flex justify-between items-center text-sm'>
           <div className='flex items-center gap-4'>
@@ -161,18 +177,30 @@ export default function Header() {
           </Link>
 
           {/* Search */}
-          <form className='col-span-9'>
-            <div className='bg-white rounded-sm p-1 flex'>
-              <input
-                type='text'
-                name='search'
-                className='text-black px-3 py-2 border-none outline-none bg-transparent flex-1'
-              />
-              <button className='rounded-sm py-2 px-6 shrink-0 bg-primary hover:opacity-90 cursor-pointer'>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-              </button>
+          <div className='col-span-9 relative'>
+            <form>
+              <div className='bg-white rounded-sm p-1 flex'>
+                <input
+                  type='text'
+                  name='search'
+                  placeholder='Tìm kiếm sản phẩm'
+                  className='text-black px-3 py-2 border-none outline-none bg-transparent flex-1'
+                />
+                <button className='rounded-sm py-2 px-6 shrink-0 bg-primary hover:opacity-90 cursor-pointer'>
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
+              </div>
+            </form>
+
+            <div ref={ref} className='text-xs absolute mt-1 flex gap-3 overflow-hidden w-full flex-wrap'>
+              <span>Giấy Ăn Top Gia Thùng 30</span>
+              <span>Gói Bim Bim Que</span>
+              <span>Khăn Giấy Rút</span>
+              <span>Dép MLB Chính Hãng</span>
+              <span>Giấy Top Gia Chính Hãng 1280 Tờ</span>
+              <span>Kit Arduino</span>
             </div>
-          </form>
+          </div>
 
           {/* Cart */}
           <div className='col-span-1 items-center flex justify-center'>

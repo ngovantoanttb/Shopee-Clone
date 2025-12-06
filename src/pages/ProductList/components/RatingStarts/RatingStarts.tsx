@@ -1,7 +1,7 @@
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { createSearchParams, useNavigate } from 'react-router-dom'
-import { QueryConfig } from '../ProductList'
+import { QueryConfig } from '../../ProductList'
 import path from 'src/constants/path'
 
 // index 0: Có 5 sao vàng tương ứng từ index 0 -> 4
