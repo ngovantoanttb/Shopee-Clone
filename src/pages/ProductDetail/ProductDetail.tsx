@@ -7,7 +7,7 @@ import {
   faTruck
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
@@ -21,10 +21,14 @@ import ProductImagePopup from './components/ProductImagePopup'
 import Product from '../ProductList/components/Product'
 import path from 'src/constants/path'
 import QuantityController from 'src/components/QuantityController'
+import purchaseApi from 'src/apis/purchases.api'
+import { purchasesStatus } from 'src/constants/purchase'
+import { queryClient } from 'src/main'
+import { toast } from 'react-toastify'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
-  
+
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
@@ -62,7 +66,10 @@ export default function ProductDetail() {
     staleTime: 3 * 60 * 1000
   })
 
-  console.log(productsData)
+  const addToCartMutation = useMutation({
+    mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
+  })
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -122,6 +129,20 @@ export default function ProductDetail() {
 
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
+  }
+
+  const addToCart = () => {
+    addToCartMutation.mutate(
+      { product_id: product?._id as string, buy_count: buyCount },
+      {
+        onSuccess: (response) => {
+          queryClient.invalidateQueries({
+            queryKey: ['purchases', { status: purchasesStatus.inCart }]
+          })
+          toast.success(response?.data?.message)
+        }
+      }
+    )
   }
   if (!product) return null
 
@@ -242,9 +263,9 @@ export default function ProductDetail() {
               {/* <FlashSale duration={3600} /> */}
 
               <div className='flex items-center mt-6 flex-wrap py-5 px-4'>
-                <span className='text-red-500 text-3xl'>{formatCurrency(product?.price || 0)}đ</span>
+                <span className='text-red-500 text-3xl'>{formatCurrency(product?.price || 0)}₫</span>
                 <span className='line-through text-gray-500 text-base ml-2'>
-                  {formatCurrency(product?.price_before_discount || 0)}đ
+                  {formatCurrency(product?.price_before_discount || 0)}₫
                 </span>
                 <span className='text-red-500 ml-2 bg-red-100 rounded text-xs px-1 py-0.5 font-bold'>
                   {rateSale(product?.price_before_discount || 0, product?.price || 0)} Giảm
@@ -365,7 +386,10 @@ export default function ProductDetail() {
                 {/* Buttons */}
                 <div className='pb-6'>
                   <div className='flex items-center gap-4 mt-4'>
-                    <button className='border border-primary text-orange-600 py-3 px-4 rounded flex items-center justify-center gap-2 cursor-pointer hover:bg-primary/10'>
+                    <button
+                      onClick={addToCart}
+                      className='border border-primary text-orange-600 py-3 px-4 rounded flex items-center justify-center gap-2 cursor-pointer hover:bg-primary/10'
+                    >
                       <FontAwesomeIcon icon={faCartShopping} /> Thêm Vào Giỏ Hàng
                     </button>
 

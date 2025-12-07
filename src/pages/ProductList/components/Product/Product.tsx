@@ -13,7 +13,7 @@ interface Props {
 }
 export default function Product({ product }: Props) {
   return (
-    <Link to={`${path.home}${generateNameId({name: product.name, id:product._id})}`}>
+    <Link to={`${path.home}${generateNameId({ name: product.name, id: product._id })}`}>
       <div
         className='group bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 
   duration-150 ease-out overflow-hidden relative border border-transparent'
@@ -55,7 +55,7 @@ export default function Product({ product }: Props) {
             <span className='line-through text-gray-500 text-sm mr-1'>
               {formatCurrency(product.price_before_discount)}đ
             </span>
-            <span className='text-red-500 text-lg font-semibold'>{formatCurrency(product.price)}đ</span>
+            <span className='text-red-500 text-lg font-semibold'>{formatCurrency(product.price)}₫</span>
             {/* <span className='text-red-500 ml-1 bg-red-100 rounded text-xs px-1 py-0.5'>-34%</span> */}
           </div>
 

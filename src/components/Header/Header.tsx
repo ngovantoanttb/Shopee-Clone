@@ -14,13 +14,16 @@ import Popover from '../Popover'
 import authApi from 'src/apis/auth.api'
 import { useContext, useEffect, useRef } from 'react'
 import { AppContext } from 'src/contexts/app.context'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import path from 'src/constants/path'
 import useQueryConfig from 'src/hooks/useQueryConfig'
 import { useForm } from 'react-hook-form'
 import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import { purchasesStatus } from 'src/constants/purchase'
+import purchaseApi from 'src/apis/purchases.api'
+import { formatCurrency } from 'src/types/utils.type'
 
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
@@ -43,6 +46,17 @@ export default function Header() {
       setProfile(null)
     }
   })
+
+  // Khi chuyển trang Header chỉ bị re-render
+  // Chứ không bị unmount - mounting again
+  // Trừ trường hợp logout rồi sang RegisterLayout rồi vào lại
+  // Nên các query này sẽ không bị isActive => Không bị gọi lại => không cần thiết phải set stale: Ifninity
+  const { data: PurchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
+  })
+  const purchasesInCart = PurchasesInCartData?.data.data
+
   const handleLogout = () => {
     logoutMutation.mutate()
   }
@@ -63,44 +77,9 @@ export default function Header() {
         }
     navigate({
       pathname: path.home,
-      search: createSearchParams(
-        config
-      ).toString()
+      search: createSearchParams(config).toString()
     })
   })
-
-  const products = [
-    {
-      id: 1,
-      name: 'Áo Thun Tay Lỡ Nam Nữ Cotton Un...',
-      price: '47.039₫',
-      img: '/img/aothun1.jpg'
-    },
-    {
-      id: 2,
-      name: 'Áo thun form Oversize Local Bran...',
-      price: '280.000₫',
-      img: '/img/aothun2.jpg'
-    },
-    {
-      id: 3,
-      name: 'Combo 2 Gói Snack bim bim que Mi...',
-      price: '24.500₫',
-      img: '/img/snack.jpg'
-    },
-    {
-      id: 4,
-      name: 'Móc khóa chất liệu silicone cao cấp...',
-      price: '32.000₫',
-      img: '/img/mockhoa1.jpg'
-    },
-    {
-      id: 5,
-      name: 'Móc Khóa Rồng So Cute',
-      price: '29.500₫',
-      img: '/img/mockhoa2.jpg'
-    }
-  ]
 
   useEffect(() => {
     const container = ref.current
@@ -304,7 +283,7 @@ export default function Header() {
               plascement='bottom-end'
               renderPopover={
                 <>
-                  {products.length === 0 ? (
+                  {purchasesInCart?.length === 0 ? (
                     <div className='mx-auto flex flex-col items-center justify-center px-30 py-4'>
                       <img
                         src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/12fe8880616de161.png'
@@ -320,20 +299,25 @@ export default function Header() {
 
                       {/* LIST KHÔNG CÓ PADDING → HOVER FULL WIDTH */}
                       <div>
-                        {products.map((p) => (
-                          <div key={p.id} className='group hover:bg-gray-100'>
+                        {purchasesInCart?.map((p) => (
+                          <div key={p._id} className='group hover:bg-gray-100'>
                             {/* padding đưa vào layer con để hover được full width */}
                             <div className='flex items-start gap-2 px-2 py-3'>
-                              <img src={images.avt} className='w-10 h-10 object-cover shrink-0' />
-                              <span className='text-sm text-gray-800 truncate grow leading-normal'>{p.name}</span>
-                              <span className='text-red-600 font-medium shrink-0 ml-2'>{p.price}</span>
+                              <img src={p.product.image} className='w-10 h-10 object-cover shrink-0' />
+                              <div className='text-sm text-gray-800 truncate grow leading-normal'>{p.product.name}</div>
+                              <div className='text-red-600 font-medium shrink-0 ml-2 text-sm'>
+                                <div>{formatCurrency(p.product.price)}₫</div>
+                              </div>
                             </div>
                           </div>
                         ))}
                       </div>
 
                       <div className='flex items-center justify-between p-2 mt-1 text-gray-600'>
-                        <span className='text-xs'>6 Thêm Hàng Vào Giỏ</span>
+                        <div className='text-xs'>
+                          {purchasesInCart?.length}
+                          <span className='ml-1'>Thêm Hàng Vào Giỏ</span>
+                        </div>
                         <button className='bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded cursor-pointer'>
                           Xem Giỏ Hàng
                         </button>
@@ -347,7 +331,7 @@ export default function Header() {
                 <FontAwesomeIcon className='text-2xl' icon={faCartShopping} />
                 <span className='absolute -top-4 -right-3'>
                   <span className='flex items-center justify-center w-6 h-4 text-xs bg-white text-primary rounded-full border border-primary'>
-                    3
+                    {purchasesInCart?.length}
                   </span>
                 </span>
               </Link>
