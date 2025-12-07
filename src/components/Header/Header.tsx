@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleDown,
@@ -16,8 +16,25 @@ import { useContext, useEffect, useRef } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation } from '@tanstack/react-query'
 import path from 'src/constants/path'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import { schema, Schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+
+type FormData = Pick<Schema, 'name'>
+const nameSchema = schema.pick(['name'])
 
 export default function Header() {
+  const queryConfig = useQueryConfig()
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
+
+  const navigate = useNavigate()
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AppContext)
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutAccount,
@@ -29,6 +46,29 @@ export default function Header() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+  const ref = useRef<HTMLDivElement>(null)
+
+  const onSubmitSearch = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit(
+          {
+            ...queryConfig,
+            name: data.name
+          },
+          ['order', 'sort_by']
+        )
+      : {
+          ...queryConfig,
+          name: data.name
+        }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(
+        config
+      ).toString()
+    })
+  })
+
   const products = [
     {
       id: 1,
@@ -61,8 +101,6 @@ export default function Header() {
       img: '/img/mockhoa2.jpg'
     }
   ]
-
-  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const container = ref.current
@@ -178,12 +216,12 @@ export default function Header() {
 
           {/* Search */}
           <div className='col-span-9 relative'>
-            <form>
+            <form onSubmit={onSubmitSearch}>
               <div className='bg-white rounded-sm p-1 flex'>
                 <input
                   type='text'
-                  name='search'
                   placeholder='Tìm kiếm sản phẩm'
+                  {...register('name')}
                   className='text-black px-3 py-2 border-none outline-none bg-transparent flex-1'
                 />
                 <button className='rounded-sm py-2 px-6 shrink-0 bg-primary hover:opacity-90 cursor-pointer'>
@@ -192,6 +230,63 @@ export default function Header() {
               </div>
             </form>
 
+            {/* UI GỢI Ý TÌM KIẾM (ẢNH 1 & ẢNH 2) */}
+            {/* {showSearchDropdown && (
+              <div
+                className='absolute left-0 top-full mt-1 w-full bg-white shadow-md rounded-sm z-50'
+                Ngăn chặn sự kiện blur của input khi click vào dropdown
+                onMouseDown={handleDropdownMouseDown}
+              >
+                {searchValue.length === 0 ? (
+                  // --- ẢNH 1: Gợi ý từ khóa khi input rỗng ---
+                  <div className='text-black p-2'>
+                    <h3 className='text-gray-500 text-sm mb-1 px-2'>Từ khóa gợi ý</h3>
+                    <div className='flex flex-col'>
+                      {recentKeywords.map((keyword, index) => (
+                        <Link
+                          to={{
+                            pathname: path.home,
+                            search: createSearchParams({ name: keyword }).toString()
+                          }}
+                          key={index}
+                          className='p-2 hover:bg-gray-100 text-sm capitalize'
+                        >
+                          {keyword}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  --- ẢNH 2: Gợi ý sản phẩm khi đang nhập ---
+                  <div className='text-black p-2'>
+                    <h3 className='text-gray-500 text-sm mb-1 px-2'>Kết quả tìm kiếm cho "{searchValue}"</h3>
+
+                    {filteredProducts.length > 0 ? (
+                      <div className='max-h-80 overflow-y-auto'>
+                        {filteredProducts.slice(0, 5).map((p) => (
+                          <div key={p.id} className='flex items-center p-2 hover:bg-gray-100 cursor-pointer'>
+                            <img src={images.avt} alt={p.name} className='w-10 h-10 object-cover shrink-0' />
+                            Truncate tên sản phẩm dài
+                            <span className='text-sm text-gray-800 truncate grow ml-2'>{p.name}</span>
+                            <span className='text-red-600 font-medium shrink-0 ml-2'>{p.price}</span>
+                          </div>
+                        ))}
+                        <button
+                          onClick={onSubmitSearch}
+                          className='flex justify-center p-3 text-primary hover:bg-gray-100 font-semibold text-sm mt-2'
+                        >
+                          Xem tất cả kết quả
+                        </button>
+                      </div>
+                    ) : (
+                      <div className='p-4 text-center text-gray-500 text-sm'>
+                        Không tìm thấy sản phẩm nào khớp với **"{searchValue}"**
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )} */}
             <div ref={ref} className='text-xs absolute mt-1 flex gap-3 overflow-hidden w-full flex-wrap'>
               <span>Giấy Ăn Top Gia Thùng 30</span>
               <span>Gói Bim Bim Que</span>

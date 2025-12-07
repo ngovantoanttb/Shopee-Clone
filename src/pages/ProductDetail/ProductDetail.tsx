@@ -9,17 +9,22 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import images from 'src/assets'
 import ProductRating from 'src/components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle } from 'src/types/utils.type'
-import { getIdFromNameId, rateSale } from 'src/utils/utils'
+import { generateNameId, getIdFromNameId, rateSale } from 'src/utils/utils'
 import DOMPurify from 'dompurify'
-import { Product } from 'src/types/product.type'
+import { Product as ProductType, ProductListConfig } from 'src/types/product.type'
 import ProductImagePopup from './components/ProductImagePopup'
+import Product from '../ProductList/components/Product'
+import path from 'src/constants/path'
+import QuantityController from 'src/components/QuantityController'
 
 export default function ProductDetail() {
+  const [buyCount, setBuyCount] = useState(1)
+  
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
@@ -46,6 +51,18 @@ export default function ProductDetail() {
     }
   }, [product])
 
+  const queryConfig: ProductListConfig = { limit: 20, page: 1, category: product?.category._id }
+  const { data: productsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig)
+    },
+    // Khi product có data thì query mới được gọi
+    enabled: Boolean(product),
+    staleTime: 3 * 60 * 1000
+  })
+
+  console.log(productsData)
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -59,7 +76,7 @@ export default function ProductDetail() {
   }, [isOpen])
 
   const next = () => {
-    if (currentIndexImages[1] < (product as Product)?.images.length) {
+    if (currentIndexImages[1] < (product as ProductType)?.images.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -101,6 +118,10 @@ export default function ProductDetail() {
 
   const handleRemoveZoom = () => {
     imageRef.current?.removeAttribute('style')
+  }
+
+  const handleBuyCount = (value: number) => {
+    setBuyCount(value)
   }
   if (!product) return null
 
@@ -328,34 +349,30 @@ export default function ProductDetail() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className='flex my-8 items-center'>
-                <p className='text-gray-500 mb-1'>Số Lượng</p>
-
-                <div className='flex items-center ml-8'>
-                  <button className='px-3 py-1 border border-gray-300 text-lg cursor-not-allowed text-gray-400'>
-                    -
-                  </button>
-
-                  <span className='px-4 py-1 border border-gray-300 text-lg'>1</span>
-
-                  <button className='px-3 py-1 border border-gray-300 text-lg cursor-pointer'>+</button>
-
-                  <span className='text-gray-500 ml-2'>
+                <div className='flex my-8 items-center'>
+                  <div className='text-gray-500 mr-8'>Số Lượng</div>
+                  <QuantityController
+                    value={buyCount}
+                    onDecrease={handleBuyCount}
+                    onIncrease={handleBuyCount}
+                    onType={handleBuyCount}
+                    max={product.quantity}
+                  />
+                  <div className='text-gray-500 ml-2'>
                     {product?.quantity !== 0 ? `Có ${product?.quantity} sản phẩm có sẵn` : 'HẾT HÀNG'}
-                  </span>
+                  </div>
                 </div>
-              </div>
-              {/* Buttons */}
-              <div className='pb-6'>
-                <div className='flex items-center gap-4 mt-4'>
-                  <button className='border border-primary text-orange-600 py-3 px-4 rounded flex items-center justify-center gap-2 cursor-pointer hover:bg-primary/10'>
-                    <FontAwesomeIcon icon={faCartShopping} /> Thêm Vào Giỏ Hàng
-                  </button>
+                {/* Buttons */}
+                <div className='pb-6'>
+                  <div className='flex items-center gap-4 mt-4'>
+                    <button className='border border-primary text-orange-600 py-3 px-4 rounded flex items-center justify-center gap-2 cursor-pointer hover:bg-primary/10'>
+                      <FontAwesomeIcon icon={faCartShopping} /> Thêm Vào Giỏ Hàng
+                    </button>
 
-                  <button className=' bg-orange-600 text-white py-3 px-12 rounded font-semibold cursor-pointer hover:bg-primary/95'>
-                    Mua Ngay
-                  </button>
+                    <button className=' bg-orange-600 text-white py-3 px-12 rounded font-semibold cursor-pointer hover:bg-primary/95'>
+                      Mua Ngay
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -543,56 +560,41 @@ export default function ProductDetail() {
             <div className='pt-4 pl-4 text-gray-500'>Top Sản Phẩm Nổi Bật</div>
 
             <div className='pt-4'>
-              <div className='px-4'>
-                <img src={images.avt} />
-                <div className='px-1'>
-                  <span className='line-clamp-2 text-gray-700 mt-1'>
-                    Thắt lưng mặt xoay nam thắt lưng nam cao cấp thời trang dây nịt da khóa tự động X003
-                  </span>
-                  <span className='flex-wrap line-clamp-2 text-red-500 pb-2'>32.999₫ - 33.000₫</span>
-                </div>
-              </div>
-              <div className='h-px bg-gray-300'></div>
-            </div>
-            <div className='pt-4'>
-              <div className='px-4'>
-                <img src={images.avt} />
-                <div className='px-1'>
-                  <span className='line-clamp-2 text-gray-700 mt-1'>
-                    Thắt lưng mặt xoay nam thắt lưng nam cao cấp thời trang dây nịt da khóa tự động X003
-                  </span>
-                  <span className='flex-wrap line-clamp-2 text-red-500 pb-2'>32.999₫ - 33.000₫</span>
-                </div>
-              </div>
-              <div className='h-px bg-gray-300'></div>
-            </div>
-            <div className='pt-4'>
-              <div className='px-4'>
-                <img src={images.avt} />
-                <div className='px-1'>
-                  <span className='line-clamp-2 text-gray-700 mt-1'>
-                    Thắt lưng mặt xoay nam thắt lưng nam cao cấp thời trang dây nịt da khóa tự động X003
-                  </span>
-                  <span className='flex-wrap line-clamp-2 text-red-500 pb-2'>32.999₫ - 33.000₫</span>
-                </div>
-              </div>
-              <div className='h-px bg-gray-300'></div>
+              {(productsData?.data?.data.products || [])
+                .filter((p) => p._id !== product._id)
+                .slice(0, 3)
+                .map((p) => (
+                  <Link
+                    to={`${path.home}${generateNameId({ name: p.name, id: p._id })}`}
+                    key={p._id}
+                    className='block px-4'
+                  >
+                    <img src={p.image} alt={p.name} />
+                    <div className='flex-1 pt-2 px-2'>
+                      <div className='line-clamp-2 text-gray-700 font-medium'>{p.name}</div>
+                      <div className='text-red-500 font-semibold mt-1'>{formatCurrency(p.price)}đ</div>
+                      <div className='text-xs text-gray-400'>{formatCurrency(p.price_before_discount)}đ</div>
+                    </div>
+
+                    <div className='h-px bg-gray-300 mt-3'></div>
+                  </Link>
+                ))}
             </div>
           </div>
         </div>
 
         {/* Các sản phẩm liên quan */}
-        {/* <div className='mt-8'>
-          <div className='uppercase text-base text-gray-500 font-medium mb-4'>Các sản phẩm liên quan</div>
+        <div className='mt-8'>
+          <div className='uppercase text-base text-gray-500 font-medium mb-4'>Có thể bạn cũng thích</div>
           <div className='grid grid-cols-5 gap-4'>
-            {relatedProductsData?.data?.products?.map((relatedProduct) => (
-              <div key={relatedProduct._id}>
-                <Product product={relatedProduct} />
+            {productsData?.data?.data.products.map((product) => (
+              <div key={product._id}>
+                <Product product={product} />
               </div>
             ))}
-          </div> */}
-        {/* Pagination */}
-        {/* </div> */}
+          </div>
+          {/* Pagination */}
+        </div>
       </div>
       {isOpen && (
         <ProductImagePopup
