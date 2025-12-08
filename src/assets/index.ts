@@ -2,7 +2,7 @@ import banner from './image/banner.png'
 import gov from './image/gov.png'
 import touch from './image/touch.png'
 import badge from './image/Badge.png'
-import badgeshort from './image/Badge-ngan.png'
+import badgeShort from './image/Badge-ngan.png'
 import bn1 from './image/bn1.webp'
 import bn2 from './image/bn2.webp'
 import bn3 from './image/bn3.webp'
@@ -20,10 +20,13 @@ import img5 from './image/5.png'
 import img6 from './image/6.png'
 import sale1 from './image/sale1.webp'
 import sale2 from './image/sale2.webp'
-import salebanner from './image/sale-banner.png'
+import saleBanner from './image/sale-banner.png'
 import login from './image/login.png'
 import security from './image/security.png'
-import avt from './image/avt-sp.jpg'
+import avt from './image/avt.jpg'
+import saleCart from './image/sale-cart.png'
+import voucher from './image/voucher.svg'
+
 
 export const images = {
   avt,
@@ -31,7 +34,7 @@ export const images = {
   gov,
   touch,
   badge,
-  badgeshort,
+  badgeShort,
   bn1,
   bn2,
   bn3,
@@ -49,9 +52,11 @@ export const images = {
   img6,
   sale1,
   sale2,
-  salebanner,
+  saleBanner,
   login,
-  security
+  security,
+  saleCart,
+  voucher
 }
 
 export default images

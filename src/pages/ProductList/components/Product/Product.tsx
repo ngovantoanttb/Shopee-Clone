@@ -32,7 +32,7 @@ export default function Product({ product }: Props) {
           {/* Badge 12.12 */}
           <div className='absolute bottom-0 w-full h-full'>
             <img
-              src={images.badge ? images.badge : images.badgeshort}
+              src={images.badge ? images.badge : images.badgeShort}
               alt='badge'
               className='w-full pointer-events-none'
             />

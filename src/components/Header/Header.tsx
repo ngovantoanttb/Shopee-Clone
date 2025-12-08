@@ -286,14 +286,14 @@ export default function Header() {
               plascement='bottom-end'
               renderPopover={
                 <>
-                  {PurchasesInCartData ? (
+                  {PurchasesInCartData?.data.data.length !== 0 ? (
                     <div className='bg-white relative max-w-sm'>
                       <div className='p-2'>
                         <h2 className='text-gray-500 text-sm mb-3 capitalize'>Sản Phẩm Mới Thêm</h2>
                       </div>
 
                       {/* LIST KHÔNG CÓ PADDING → HOVER FULL WIDTH */}
-                      <div>
+                      <div className='max-h-[320px] overflow-y-auto'>
                         {purchasesInCart?.map((p) => (
                           <div key={p._id} className='group hover:bg-gray-100'>
                             {/* padding đưa vào layer con để hover được full width */}
@@ -313,7 +313,10 @@ export default function Header() {
                           {purchasesInCart?.length}
                           <span className='ml-1'>Thêm Hàng Vào Giỏ</span>
                         </div>
-                        <Link to={path.cart} className='bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded cursor-pointer'>
+                        <Link
+                          to={path.cart}
+                          className='bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded cursor-pointer'
+                        >
                           Xem Giỏ Hàng
                         </Link>
                       </div>
@@ -332,7 +335,7 @@ export default function Header() {
             >
               <Link to={path.cart} className='relative'>
                 <FontAwesomeIcon className='text-2xl' icon={faCartShopping} />
-                {purchasesInCart && (
+                {purchasesInCart?.length !== 0 && (
                   <span className='absolute -top-4 -right-3'>
                     <span className='flex items-center justify-center w-6 h-4 text-xs bg-white text-primary rounded-full border border-primary'>
                       {purchasesInCart?.length}
