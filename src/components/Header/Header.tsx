@@ -24,6 +24,7 @@ import { omit } from 'lodash'
 import { purchasesStatus } from 'src/constants/purchase'
 import purchaseApi from 'src/apis/purchases.api'
 import { formatCurrency } from 'src/types/utils.type'
+import { queryClient } from 'src/main'
 
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
@@ -44,6 +45,7 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
     }
   })
 
@@ -53,7 +55,8 @@ export default function Header() {
   // Nên các query này sẽ không bị isActive => Không bị gọi lại => không cần thiết phải set stale: Ifninity
   const { data: PurchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
-    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated
   })
   const purchasesInCart = PurchasesInCartData?.data.data
 
@@ -283,15 +286,7 @@ export default function Header() {
               plascement='bottom-end'
               renderPopover={
                 <>
-                  {purchasesInCart?.length === 0 ? (
-                    <div className='mx-auto flex flex-col items-center justify-center px-30 py-4'>
-                      <img
-                        src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/12fe8880616de161.png'
-                        className='w-40 h-40'
-                      />
-                      <div className=' text-gray-500 py-5'>Không có sản phẩm nào</div>
-                    </div>
-                  ) : (
+                  {PurchasesInCartData ? (
                     <div className='bg-white relative max-w-sm'>
                       <div className='p-2'>
                         <h2 className='text-gray-500 text-sm mb-3 capitalize'>Sản Phẩm Mới Thêm</h2>
@@ -318,22 +313,32 @@ export default function Header() {
                           {purchasesInCart?.length}
                           <span className='ml-1'>Thêm Hàng Vào Giỏ</span>
                         </div>
-                        <button className='bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded cursor-pointer'>
+                        <Link to={path.cart} className='bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded cursor-pointer'>
                           Xem Giỏ Hàng
-                        </button>
+                        </Link>
                       </div>
+                    </div>
+                  ) : (
+                    <div className='mx-auto flex flex-col items-center justify-center px-30 py-4'>
+                      <img
+                        src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/12fe8880616de161.png'
+                        className='w-40 h-40'
+                      />
+                      <div className=' text-gray-500 py-5'>Không có sản phẩm nào</div>
                     </div>
                   )}
                 </>
               }
             >
-              <Link to='/cart' className='relative'>
+              <Link to={path.cart} className='relative'>
                 <FontAwesomeIcon className='text-2xl' icon={faCartShopping} />
-                <span className='absolute -top-4 -right-3'>
-                  <span className='flex items-center justify-center w-6 h-4 text-xs bg-white text-primary rounded-full border border-primary'>
-                    {purchasesInCart?.length}
+                {purchasesInCart && (
+                  <span className='absolute -top-4 -right-3'>
+                    <span className='flex items-center justify-center w-6 h-4 text-xs bg-white text-primary rounded-full border border-primary'>
+                      {purchasesInCart?.length}
+                    </span>
                   </span>
-                </span>
+                )}
               </Link>
             </Popover>
           </div>

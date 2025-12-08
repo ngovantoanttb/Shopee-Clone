@@ -152,7 +152,7 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          <div className='text-black/65 grid grid-cols-1 lg:grid-cols-3 gap-4 mt-10 border-t border-gray-200 py-10 text-sm'>
+          <div className='text-black/65 grid grid-cols-1 lg:grid-cols-3 gap-4 mt-10 border-t border-gray-200 py-10 text-sm font-extralight'>
             <div className='lg:col-span-1'>© 2025 Shopee. Tất cả các quyền được bảo lưu.</div>
 
             <div className='lg:col-span-2 flex items-center whitespace-nowrap overflow-hidden text-ellipsis'>
@@ -192,14 +192,14 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className='text-black/65 bg-gray-200/30 py-6'>
-        <div className='uppercase flex items-center justify-center gap-4'>
+      <div className='text-black/65 bg-gray-200/30 py-6 font-extralight'>
+        <div className='uppercase flex items-center justify-center gap-4 text-sm '>
           <div className='boder-'>Chính sách bảo mật</div>
-          <span className='border-r-2 border-gray-200 h-4'></span>
+          <span className='border-r-2 border-gray-300 h-4'></span>
           <div className=''>Quy chế hoạt động</div>
-          <span className='border-r-2 border-gray-200 h-4'></span>
+          <span className='border-r-2 border-gray-300 h-4'></span>
           <div>Chính sách vận chuyển</div>
-          <span className='border-r-2 border-gray-200 h-4'></span>
+          <span className='border-r-2 border-gray-300 h-4'></span>
           <div>CHÍNH SÁCH TRẢ HÀNG VÀ HOÀN TIỀN</div>
         </div>
         <div className='flex items-center justify-center mt-6 gap-4'>
@@ -213,7 +213,7 @@ export default function Footer() {
             <img className='h-12' src={images.touch} alt='Xác thực thương mại điện tử' />
           </div>
         </div>
-        <div className='text-center text-sm'>
+        <div className='text-center text-sm font-extralight'>
           <div>Công ty TNHH Shopee</div>
           <div className='mt-6'>
             Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Hà, Thành phố Hà Nội, Việt

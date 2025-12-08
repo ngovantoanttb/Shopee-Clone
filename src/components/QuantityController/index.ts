@@ -1,1 +1,1 @@
-export { default } from './QuantityController.tsx'
+export { default } from './QuantityController'

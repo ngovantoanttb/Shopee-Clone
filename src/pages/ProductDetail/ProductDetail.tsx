@@ -243,7 +243,9 @@ export default function ProductDetail() {
                   </div>
                   <span className='border border-gray-300 h-6 mx-6'></span>
                   <div>
-                    <span className='text-base mr-2 border-b border-black'>2,2k+</span>
+                    <span className='text-base mr-2 border-b border-black'>
+                      {formatNumberToSocialStyle(Number(product?.sold === 0 ? '0' : `${product?.sold}`))}{' '}
+                    </span>
                     <span className='text-gray-500'>Đánh giá</span>
                   </div>
                   <span className='border border-gray-300 h-6 mx-6'></span>
@@ -370,17 +372,22 @@ export default function ProductDetail() {
                     </div>
                   </div>
                 </div>
-                <div className='flex my-8 items-center'>
-                  <div className='text-gray-500 mr-8'>Số Lượng</div>
-                  <QuantityController
-                    value={buyCount}
-                    onDecrease={handleBuyCount}
-                    onIncrease={handleBuyCount}
-                    onType={handleBuyCount}
-                    max={product.quantity}
-                  />
-                  <div className='text-gray-500 ml-2'>
-                    {product?.quantity !== 0 ? `Có ${product?.quantity} sản phẩm có sẵn` : 'HẾT HÀNG'}
+                <div className='my-8'>
+                  <div className='flex items-center'>
+                    <div className='text-gray-500 mr-8'>Số Lượng</div>
+                    <QuantityController
+                      value={buyCount}
+                      onDecrease={handleBuyCount}
+                      onIncrease={handleBuyCount}
+                      onType={handleBuyCount}
+                      max={product.quantity}
+                    />
+                    <div className='text-gray-500 ml-2'>
+                      {product?.quantity !== 0 ? `Có ${product?.quantity} sản phẩm có sẵn` : 'HẾT HÀNG'}
+                    </div>
+                  </div>
+                  <div className='text-red-500 ml-24 pt-2 h-6'>
+                    {product?.quantity === buyCount ? 'Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này' : ''}
                   </div>
                 </div>
                 {/* Buttons */}
