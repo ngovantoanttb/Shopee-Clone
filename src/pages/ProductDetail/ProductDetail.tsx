@@ -25,11 +25,16 @@ import purchaseApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/constants/purchase'
 import { queryClient } from 'src/main'
 import { toast } from 'react-toastify'
+import { useContext } from 'react'
+import { AppContext } from 'src/contexts/app.context'
+import ModalPopup from 'src/components/ModalPopup'
+import { keyBy } from 'lodash'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
+  const { isAuthenticated } = useContext(AppContext)
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => {
@@ -41,6 +46,27 @@ export default function ProductDetail() {
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const [isOpen, setIsOpen] = useState(false)
+  const [isOpenQuantityModal, setIsOpenQuantityModal] = useState(false)
+
+  // Lấy purchases trong cart để kiểm tra buy_count hiện tại
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated && Boolean(product)
+  })
+
+  // Sử dụng keyBy để tạo object từ purchases theo product_id
+  const purchasesInCartByProductId = useMemo(() => {
+    if (!purchasesInCartData?.data.data) return {}
+    return keyBy(purchasesInCartData.data.data, (p) => p.product._id)
+  }, [purchasesInCartData])
+
+  // Lấy buy_count hiện tại trong cart theo product_id
+  const getCurrentBuyCountInCart = useMemo(() => {
+    if (!product) return 0
+    return purchasesInCartByProductId[product._id]?.buy_count || 0
+  }, [product, purchasesInCartByProductId])
+
   const currentImages = useMemo(
     () => (product ? product?.images.slice(...currentIndexImages) : []),
     [currentIndexImages, product]
@@ -131,8 +157,20 @@ export default function ProductDetail() {
   }
 
   const addToCart = () => {
+    if (!product) return
+
+    // Tính tổng số lượng sẽ có sau khi thêm
+    const totalQuantity = getCurrentBuyCountInCart + buyCount
+
+    // Kiểm tra nếu vượt quá số lượng hàng có sẵn
+    if (totalQuantity > product.quantity) {
+      setIsOpenQuantityModal(true)
+      return
+    }
+
+    // Nếu không vượt quá, thêm vào giỏ hàng
     addToCartMutation.mutate(
-      { product_id: product?._id as string, buy_count: buyCount },
+      { product_id: product._id, buy_count: buyCount },
       {
         onSuccess: (response) => {
           queryClient.invalidateQueries({
@@ -145,8 +183,20 @@ export default function ProductDetail() {
   }
 
   const buyNow = async () => {
+    if (!product) return
+
+    // Tính tổng số lượng sẽ có sau khi thêm
+    const totalQuantity = getCurrentBuyCountInCart + buyCount
+
+    // Kiểm tra nếu vượt quá số lượng hàng có sẵn
+    if (totalQuantity > product.quantity) {
+      setIsOpenQuantityModal(true)
+      return
+    }
+
+    // Nếu không vượt quá, thêm vào giỏ hàng và chuyển đến trang cart
     const res = await addToCartMutation.mutateAsync({
-      product_id: product?._id as string,
+      product_id: product._id,
       buy_count: buyCount
     })
     const purchase = res.data.data
@@ -637,6 +687,18 @@ export default function ProductDetail() {
           onClose={() => setIsOpen(false)}
         />
       )}
+
+      {/* Modal cảnh báo vượt quá số lượng */}
+      <ModalPopup
+        isOpen={isOpenQuantityModal}
+        message={
+          product
+            ? `Bạn đã có ${getCurrentBuyCountInCart} sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`
+            : 'Số lượng sản phẩm vượt quá số lượng hàng có sẵn.'
+        }
+        onClose={() => setIsOpenQuantityModal(false)}
+        showConfirm={false}
+      />
     </div>
   )
 }
