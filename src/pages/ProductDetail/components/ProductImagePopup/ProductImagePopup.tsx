@@ -3,33 +3,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 type Props = {
-  name: string
-  images: string[]
+  nameProduct: string
+  imagesProduct: string[]
   initialImage: string
   onClose: () => void
 }
 
-export default function ProductImagePopup({ name, images, initialImage, onClose }: Props) {
-  const [currentImage, setCurrentImage] = React.useState<string>(initialImage || images[0])
+export default function ProductImagePopup({ nameProduct, imagesProduct, initialImage, onClose }: Props) {
+  const [currentImage, setCurrentImage] = React.useState<string>(initialImage || imagesProduct[0])
 
   React.useEffect(() => {
-    // if initialImage changes (opening at a different image), reset currentImage
-    setCurrentImage(initialImage || images[0])
-  }, [initialImage, images])
+    setCurrentImage(initialImage || imagesProduct[0])
+  }, [initialImage, imagesProduct])
 
-  const currentIndex = images.indexOf(currentImage)
+  const currentIndex = imagesProduct.indexOf(currentImage)
 
   const goPrev = (e?: React.MouseEvent) => {
     e?.stopPropagation()
     if (currentIndex > 0) {
-      setCurrentImage(images[currentIndex - 1])
+      setCurrentImage(imagesProduct[currentIndex - 1])
     }
   }
 
   const goNext = (e?: React.MouseEvent) => {
     e?.stopPropagation()
-    if (currentIndex < images.length - 1) {
-      setCurrentImage(images[currentIndex + 1])
+    if (currentIndex < imagesProduct.length - 1) {
+      setCurrentImage(imagesProduct[currentIndex + 1])
     }
   }
 
@@ -58,10 +57,10 @@ export default function ProductImagePopup({ name, images, initialImage, onClose 
 
         <div className='col-span-3'>
           <div className='pl-4 pt-3'>
-            <div className='line-clamp-2 text-base pr-2'>{name}</div>
+            <div className='line-clamp-2 text-base pr-2'>{nameProduct}</div>
             <div className='max-h-96 overflow-y-auto pr-2 mt-2'>
               <div className='grid grid-cols-3 gap-1'>
-                {images.map((img, index) => (
+                {imagesProduct.map((img, index) => (
                   <div key={index} className='cursor-pointer p-1 rounded group'>
                     <button
                       onClick={() => setCurrentImage(img)}

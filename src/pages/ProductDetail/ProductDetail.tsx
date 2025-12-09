@@ -28,7 +28,6 @@ import { toast } from 'react-toastify'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
-
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
@@ -145,19 +144,6 @@ export default function ProductDetail() {
     )
   }
   if (!product) return null
-
-  const options = [
-    { id: 1, name: 'Mặt vàng 3 + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 2, name: 'Mặt trắng 3 + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 3, name: 'Mặt đen 3 + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 4, name: 'Lễ Mặt (Ngẫu nhiên)', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 5, name: 'Mặt vàng 4 + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 6, name: 'Mặt trắng 4 + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 7, name: 'Mặt đen 4 + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 8, name: 'Mặt đen CS + dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 9, name: 'Mặt đen tron1 dây da', img: '/src/assets/image/avt.jpg', disabled: false },
-    { id: 10, name: 'Mặt đen tron2 dây da', img: '/src/assets/image/avt.jpg', disabled: true }
-  ]
 
   return (
     <div className=' bg-gray-100'>
@@ -346,8 +332,8 @@ export default function ProductDetail() {
                   </div>
                 </div> */}
 
-                <div className='text-gray-700 text-sm w-full space-y-4 mt-6'>
-                  {/* Title */}
+                {/* <div className='text-gray-700 text-sm w-full space-y-4 mt-6'>
+                
                   <div className='flex'>
                     <p className='font-medium'>Phân Loại</p>
 
@@ -371,7 +357,7 @@ export default function ProductDetail() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className='my-8'>
                   <div className='flex items-center'>
                     <div className='text-gray-500 mr-8'>Số Lượng</div>
@@ -400,11 +386,18 @@ export default function ProductDetail() {
                       <FontAwesomeIcon icon={faCartShopping} /> Thêm Vào Giỏ Hàng
                     </button>
 
-                    <button className=' bg-orange-600 text-white py-3 px-12 rounded font-semibold cursor-pointer hover:bg-primary/95'>
+                    <button
+                      className=' bg-orange-600 text-white py-3 px-12 rounded font-semibold cursor-pointer hover:bg-primary/95'
+                    >
                       Mua Ngay
                     </button>
                   </div>
                 </div>
+                {/* <ModalPopup
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  message='Bạn đã có 93729 sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.'
+                /> */}
               </div>
             </div>
           </div>
@@ -629,8 +622,8 @@ export default function ProductDetail() {
       </div>
       {isOpen && (
         <ProductImagePopup
-          name={product.name}
-          images={product.images}
+          nameProduct={product.name}
+          imagesProduct={product.images}
           initialImage={activeImage}
           onClose={() => setIsOpen(false)}
         />
