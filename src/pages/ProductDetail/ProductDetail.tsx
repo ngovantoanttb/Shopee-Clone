@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import images from 'src/assets'
 import ProductRating from 'src/components/ProductRating'
@@ -38,7 +38,6 @@ export default function ProductDetail() {
     placeholderData: keepPreviousData
   })
   const product = productDetailData?.data.data
-
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -68,6 +67,7 @@ export default function ProductDetail() {
   const addToCartMutation = useMutation({
     mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
   })
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (isOpen) {
@@ -142,6 +142,19 @@ export default function ProductDetail() {
         }
       }
     )
+  }
+
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({
+      product_id: product?._id as string,
+      buy_count: buyCount
+    })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
   }
   if (!product) return null
 
@@ -387,17 +400,13 @@ export default function ProductDetail() {
                     </button>
 
                     <button
+                      onClick={buyNow}
                       className=' bg-orange-600 text-white py-3 px-12 rounded font-semibold cursor-pointer hover:bg-primary/95'
                     >
                       Mua Ngay
                     </button>
                   </div>
                 </div>
-                {/* <ModalPopup
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  message='Bạn đã có 93729 sản phẩm trong giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.'
-                /> */}
               </div>
             </div>
           </div>

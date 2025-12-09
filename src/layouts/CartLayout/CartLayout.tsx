@@ -1,14 +1,14 @@
-import Header from 'src/components/Header'
+import CartHeader from 'src/components/CartHeader'
 import Footer from 'src/components/Footer'
 
 interface Props {
   children?: React.ReactNode
 }
 
-export default function MainLayout({ children }: Props) {
+export default function CartLayout({ children }: Props) {
   return (
     <div>
-      <Header />
+      <CartHeader />
       {children}
       <Footer />
     </div>
