@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Popover from '../Popover'
 import path from 'src/constants/path'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
-import { queryClient } from 'src/main'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { purchasesStatus } from 'src/constants/purchase'
 
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AppContext)
+  const queryClient = useQueryClient()
   const logoutMutation = useMutation({
     mutationFn: authApi.logoutAccount,
     onSuccess: () => {

@@ -1,12 +1,21 @@
-import { ToastContainer } from "react-toastify";
-import useRouteElements from "./useRouteElements";
-import { useState, useEffect } from "react";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ToastContainer } from 'react-toastify'
+import useRouteElements from './useRouteElements'
+import { useState, useEffect, useContext } from 'react'
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { localStorageEventTarget } from './utils/auth'
+import { AppContext } from './contexts/app.context'
 
 function App() {
   const routeElements = useRouteElements()
+  const { reset } = useContext(AppContext)
 
+  useEffect(() => {
+    localStorageEventTarget.addEventListener('clearLS', reset)
+    return () => {
+      localStorageEventTarget.removeEventListener('clearLS', reset)
+    }
+  }, [reset])
   const [showScrollTop, setShowScrollTop] = useState(false)
 
   // Theo dõi scroll

@@ -7,7 +7,7 @@ import {
   faTruck
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
@@ -23,7 +23,6 @@ import path from 'src/constants/path'
 import QuantityController from 'src/components/QuantityController'
 import purchaseApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/constants/purchase'
-import { queryClient } from 'src/main'
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
@@ -32,6 +31,7 @@ import { keyBy } from 'lodash'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
+  const queryClient = useQueryClient()
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { isAuthenticated } = useContext(AppContext)
