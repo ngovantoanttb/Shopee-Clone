@@ -27,7 +27,7 @@ export default function Button(props: ButtonProps) {
         </svg>
       )}
 
-      <span>{children}</span>       
+      <span>{children}</span>      
     </button>
   )
 }

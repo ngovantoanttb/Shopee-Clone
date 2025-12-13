@@ -415,7 +415,7 @@ export default function Cart() {
           </div>
         </div>
       ) : (
-        <div className='mx-auto flex flex-col items-center justify-center h-96 py-10'>
+        <div className='mx-auto flex flex-col items-center justify-center min-h-screen py-10'>
           <img
             src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/12fe8880616de161.png'
             className='w-40 h-40'

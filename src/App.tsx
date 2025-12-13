@@ -40,7 +40,7 @@ function App() {
     }, 15)
   }
   return (
-    <div className='flex flex-col min-h-screen dark:bg-gray-900'>
+    <div>
       {routeElements}
       <ToastContainer />
       {/* Nút scroll to top với hiệu ứng mượt mà */}

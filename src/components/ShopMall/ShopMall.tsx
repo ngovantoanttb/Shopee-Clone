@@ -115,7 +115,7 @@ transition-transform group-hover:scale-200 hover:scale-200 z-30 cursor-pointer'
                         key={i}
                         className='flex items-center justify-center h-30 overflow-hidden border-gray-100 border'
                       >
-                        <img src={img} alt='' className='max-h-40 object-contain' />
+                        <img src={img} alt={`Logo ${i}`} className='max-h-40 object-contain' />
                       </div>
                     ))}
                   </div>

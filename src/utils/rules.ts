@@ -4,7 +4,7 @@ import * as yup from 'yup'
 export interface FormData {
   email: string
   password: string
-  confirm_password: string,
+  confirm_password: string
 }
 
 type Rules = {
@@ -66,11 +66,20 @@ export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
 })
 
 function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
-  const {price_min, price_max} = this.parent as {price_min: string, price_max: string}
+  const { price_min, price_max } = this.parent as { price_min: string; price_max: string }
   if (price_min !== '' && price_max !== '') {
     return Number(price_max) >= Number(price_min)
   }
   return price_min !== '' || price_max !== ''
+}
+
+const handleConfirmPasswordYup = (refString: string) => {
+  return yup
+    .string()
+    .required('Nhập lại password là bắt buộc')
+    .min(6, 'Độ dài từ 6 - 160 ký tự')
+    .max(160, 'Độ dài từ 6 - 160 ký tự')
+    .oneOf([yup.ref(refString)], 'Nhập lại password không khớp')
 }
 
 export const schema = yup.object({
@@ -85,12 +94,7 @@ export const schema = yup.object({
     .required('Mật khẩu không được để trống')
     .max(160, 'Mật khẩu không được quá 160 ký tự')
     .min(6, 'Mật khẩu không được ít hơn 6 ký tự'),
-  confirm_password: yup
-    .string()
-    .required('Nhập lại mật khẩu không được để trống')
-    .max(160, 'Mật khẩu không được quá 160 ký tự')
-    .min(6, 'Mật khẩu không được ít hơn 6 ký tự')
-    .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
+  confirm_password: handleConfirmPasswordYup('password'),
   price_min: yup.string().test({
     name: 'price-not-allowed',
     message: 'Giá không phù hợp',
@@ -104,4 +108,22 @@ export const schema = yup.object({
   name: yup.string().trim().required('Tên sản phẩm không được để trống')
 })
 
+export const userSchema = yup.object({
+  name: yup.string().max(160, 'Tên không được quá 160 ký tự'),
+  phone: yup.string().max(10, 'Số điện thoại không được quá 10 ký tự'),
+  avatar: yup.string().max(1000, 'Độ dài không được quá 1000 ký tự'),
+  address: yup.string().max(160, 'Địa chỉ không được quá 160 ký tự'),
+  date_of_birth: yup.date().max(new Date(), 'Ngày không hợp lệ, vui lòng chỉnh ngày chính xác'),
+  password: schema.fields['password'] as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  new_password: schema.fields['password'] as yup.StringSchema<string | undefined, yup.AnyObject, undefined, ''>,
+  confirm_password: handleConfirmPasswordYup('new_password') as yup.StringSchema<
+    string | undefined,
+    yup.AnyObject,
+    undefined,
+    ''
+  >
+})
+
 export type Schema = yup.InferType<typeof schema>
+
+export type UserSchema = yup.InferType<typeof userSchema>

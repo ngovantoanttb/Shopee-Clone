@@ -145,7 +145,7 @@ export default function Header() {
               plascement='bottom-end'
               renderPopover={
                 <>
-                  {purchasesInCartData?.data.data.length !== 0 ? (
+                  {isAuthenticated && purchasesInCart?.length !== 0 ? (
                     <div className='bg-white relative max-w-sm'>
                       <div className='p-2'>
                         <h2 className='text-gray-500 text-sm mb-3 capitalize'>Sản Phẩm Mới Thêm</h2>
@@ -194,7 +194,7 @@ export default function Header() {
             >
               <Link to={path.cart} className='relative'>
                 <FontAwesomeIcon className='text-2xl' icon={faCartShopping} />
-                {purchasesInCart?.length !== 0 && (
+                {isAuthenticated && purchasesInCart?.length !== 0 && (
                   <span className='absolute -top-4 -right-3'>
                     <span className='flex items-center justify-center w-6 h-4 text-xs bg-white text-primary rounded-full border border-primary'>
                       {purchasesInCart?.length}

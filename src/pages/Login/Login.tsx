@@ -82,7 +82,7 @@ export default function Login() {
                   name='password'
                   register={register}
                   type='password'
-                  className='mt-4'
+                  className='mt-4 relative'
                   errorMessage={errors.password?.message}
                   placeholder='Password'
                 />

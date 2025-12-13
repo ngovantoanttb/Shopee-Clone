@@ -78,7 +78,7 @@ export default function Register() {
                   name='password'
                   register={register}
                   type='password'
-                  className='mt-2'
+                  className='mt-2 relative'
                   errorMessage={errors.password?.message}
                   placeholder='Password'
                   autoComplete='on'
@@ -87,7 +87,7 @@ export default function Register() {
                   name='confirm_password'
                   register={register}
                   type='password'
-                  className='mt-2'
+                  className='mt-2 relative'
                   errorMessage={errors.confirm_password?.message}
                   placeholder='Confirm Password'
                   autoComplete='on'

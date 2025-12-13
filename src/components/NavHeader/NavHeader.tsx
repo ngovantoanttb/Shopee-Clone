@@ -1,6 +1,5 @@
-import { faAngleDown, faBell, faCircleQuestion, faGlobe } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faBell, faCircleQuestion, faCircleUser, faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons'
-import images from 'src/assets'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Popover from '../Popover'
@@ -10,6 +9,7 @@ import authApi from 'src/apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { purchasesStatus } from 'src/constants/purchase'
+import { INVALID_AVATAR_URL } from 'src/assets'
 
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AppContext)
@@ -92,7 +92,7 @@ export default function NavHeader() {
                   Tài khoản của tôi
                 </Link>
                 <Link
-                  to='/'
+                  to={path.historyPurchase}
                   className='cursor-pointer hover:text-emerald-400 hover:bg-gray-200/20 w-full text-left p-2 block'
                 >
                   Đơn mua
@@ -106,8 +106,15 @@ export default function NavHeader() {
               </div>
             }
           >
-            <img src={images.avt} alt='avatar' className='h-5 w-5 rounded-full' />
-            {profile?.email.split('@gmail.com')}
+            <Link to={path.profile} className='flex gap-2'>
+              {!profile?.avatar || profile?.avatar === INVALID_AVATAR_URL ? (
+                <FontAwesomeIcon icon={faCircleUser} className='h-5 w-5' />
+              ) : (
+                <img src={profile?.avatar} alt={profile?.name} className='h-5 w-5 rounded-full object-cover' />
+              )}
+  
+              {profile?.email.split('@gmail.com')}
+            </Link>
           </Popover>
         )}
       </div>

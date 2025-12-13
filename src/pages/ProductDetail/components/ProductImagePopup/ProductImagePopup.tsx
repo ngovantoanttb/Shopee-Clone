@@ -44,7 +44,7 @@ export default function ProductImagePopup({ nameProduct, imagesProduct, initialI
             <FontAwesomeIcon icon={faChevronLeft} className=' text-white' />
           </button>
 
-          <img src={currentImage} className='object-contain max-h-[70vh] w-full' alt='' />
+          <img src={currentImage} className='object-contain max-h-[70vh] w-full' alt={nameProduct} />
 
           <button
             className='py-3 px-2 bg-black/30 absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer text-4xl'

@@ -23,10 +23,11 @@ import sale2 from './image/sale2.webp'
 import saleBanner from './image/sale-banner.png'
 import login from './image/login.png'
 import security from './image/security.png'
-import avt from './image/avt.jpg'
+import avt from './image/avt-sp.jpg'
 import saleCart from './image/sale-cart.png'
 import voucher from './image/voucher.svg'
-
+import noPurchase from './image/no-purchase.png'
+import config from 'src/constants/config'
 
 export const images = {
   avt,
@@ -56,7 +57,10 @@ export const images = {
   login,
   security,
   saleCart,
-  voucher
+  voucher,
+  noPurchase
 }
 
 export default images
+
+export const INVALID_AVATAR_URL = `${config.baseURL}/images/undefined`
