@@ -10,8 +10,13 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { purchasesStatus } from 'src/constants/purchase'
 import { INVALID_AVATAR_URL } from 'src/assets'
+import { useTranslation } from 'react-i18next'
+import { locales } from 'src/i18n/i18n'
 
 export default function NavHeader() {
+  const { i18n } = useTranslation()
+  const currentLanguage = locales[i18n.language as keyof typeof locales]
+
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AppContext)
   const queryClient = useQueryClient()
   const logoutMutation = useMutation({
@@ -25,6 +30,10 @@ export default function NavHeader() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+  const changeLanguage = (lng: 'en' | 'vi') => {
+    i18n.changeLanguage(lng)
+  }
+
   return (
     <div className='flex justify-between items-center text-sm'>
       <div className='flex items-center gap-4'>
@@ -56,16 +65,26 @@ export default function NavHeader() {
         {/* Ngôn ngữ */}
         <Popover
           as='span'
-          className='cursor-pointer flex items-center gap-1'
+          className='cursor-pointer flex items-center  gap-1'
           renderPopover={
             <div className='flex flex-col items-start p-2'>
-              <button className='cursor-pointer p-2 hover:text-primary w-full text-left pr-20'>Tiếng Việt</button>
-              <button className='cursor-pointer p-2 hover:text-primary w-full text-left pr-20'>English</button>
+              <button
+                className='cursor-pointer p-2 hover:text-primary w-full text-left pr-20'
+                onClick={() => changeLanguage('vi')}
+              >
+                Tiếng Việt
+              </button>
+              <button
+                className='cursor-pointer p-2 hover:text-primary w-full text-left pr-20'
+                onClick={() => changeLanguage('en')}
+              >
+                English
+              </button>
             </div>
           }
         >
           <FontAwesomeIcon icon={faGlobe} />
-          Tiếng Việt
+          {currentLanguage}
           <FontAwesomeIcon icon={faAngleDown} />
         </Popover>
 
@@ -112,7 +131,7 @@ export default function NavHeader() {
               ) : (
                 <img src={profile?.avatar} alt={profile?.name} className='h-5 w-5 rounded-full object-cover' />
               )}
-  
+
               {profile?.email.split('@gmail.com')}
             </Link>
           </Popover>

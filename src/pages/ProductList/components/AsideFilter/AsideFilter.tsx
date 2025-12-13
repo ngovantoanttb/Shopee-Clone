@@ -14,6 +14,7 @@ import RatingStarts from '../RatingStarts'
 import omit from 'lodash/omit'
 import { QueryConfig } from 'src/hooks/useQueryConfig'
 import InputV2 from 'src/components/InputV2'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   queryConfig: QueryConfig
@@ -31,6 +32,7 @@ type FormData = NoUndefinedField<Pick<Schema, 'price_min' | 'price_max'>>
 const priceSchema = schema.pick(['price_min', 'price_max']) as yup.ObjectSchema<FormData>
 
 export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { t } = useTranslation('home')
   const { category } = queryConfig
   const {
     control,
@@ -71,7 +73,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       <div>
         <Link to={path.home} className='border-gray-300 py-4 border-b'>
           <FontAwesomeIcon icon={faList} className='mr-2' />
-          <span className='font-bold uppercase'>Tất Cả Danh Mục</span>
+          <span className='font-bold uppercase'>{t('aside filter.all categories')}</span>
         </Link>
         <ul className='mt-4 text-sm'>
           {categories.map((categoryItem) => {
