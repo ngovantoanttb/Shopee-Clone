@@ -12,7 +12,7 @@ export default function UserSideNav() {
   return (
     <div>
       <div className='flex items-center text-sm border-b border-gray-200 pb-5 pt-5.5'>
-        {!profile || profile?.avatar === INVALID_AVATAR_URL ? (
+        {!profile?.avatar || profile?.avatar === INVALID_AVATAR_URL ? (
           <FontAwesomeIcon icon={faUser} className='text-lg p-3 text-gray-400 border border-gray-300 rounded-full' />
         ) : (
           <img src={profile?.avatar} alt={profile?.name} className='rounded-full w-12 h-12 object-cover' />

@@ -106,7 +106,7 @@ export default function NavHeader() {
               </div>
             }
           >
-            <Link to={path.profile} className='flex gap-2'>
+            <Link to={path.profile} className='flex gap-2 items-center'>
               {!profile?.avatar || profile?.avatar === INVALID_AVATAR_URL ? (
                 <FontAwesomeIcon icon={faCircleUser} className='h-5 w-5' />
               ) : (
