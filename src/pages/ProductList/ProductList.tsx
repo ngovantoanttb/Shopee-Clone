@@ -5,8 +5,6 @@ import productApi from 'src/apis/product.api'
 import { ProductListConfig } from 'src/types/product.type'
 import Pagination from 'src/components/Pagination'
 import categoryApi from 'src/apis/category.api'
-import SaleBanner from 'src/components/SaleBanner/SaleBanner'
-import ShopMall from 'src/components/ShopMall'
 import SortProductList from './components/SortProductList'
 import useQueryConfig from 'src/hooks/useQueryConfig'
 
@@ -32,9 +30,7 @@ export default function ProductList() {
 
   return (
     <div className='bg-gray-100 pb-20'>
-      <SaleBanner />
-      <ShopMall />
-      <div className='max-w-6xl mx-auto mt-4'>
+      <div className='max-w-6xl mx-auto pt-4'>
         {productsData?.data.data && (
           <div className='grid grid-cols-12 gap-4'>
             <div className='col-span-2'>

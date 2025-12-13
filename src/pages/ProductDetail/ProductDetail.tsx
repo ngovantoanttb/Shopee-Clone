@@ -216,7 +216,7 @@ export default function ProductDetail() {
 
   return (
     <div className=' bg-gray-100'>
-      <div className='pt-8 max-w-6xl mx-auto pb-20 text-sm'>
+      <div className='pt-6 max-w-6xl mx-auto pb-20 text-sm'>
         <div className='bg-white shadow-md'>
           <div className='flex'>
             {/* Ảnh sản phẩm */}
