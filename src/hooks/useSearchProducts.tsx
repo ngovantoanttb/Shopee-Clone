@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { createSearchParams, useNavigate } from "react-router-dom"
 
 import { Schema, schema } from "src/utils/rules"
-import { omit } from "lodash"
+import omit from 'lodash/omit'
 import path from "src/constants/path"
 
 type FormData = Pick<Schema, 'name'>
