@@ -5,8 +5,7 @@ import images from 'src/assets'
 import path from 'src/constants/path'
 // import ProductRating from 'src/components/ProductRating'
 import { Product as ProductType } from 'src/types/product.type'
-import { formatCurrency, formatNumberToSocialStyle } from 'src/types/utils.type'
-import { generateNameId } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, generateNameId } from 'src/utils/utils'
 
 interface Props {
   product: ProductType

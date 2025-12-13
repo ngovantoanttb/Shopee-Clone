@@ -8,9 +8,9 @@ import { useQuery } from '@tanstack/react-query'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import purchaseApi from 'src/apis/purchases.api'
-import { formatCurrency } from 'src/types/utils.type'
 import NavHeader from '../NavHeader'
 import useSearchProducts from 'src/hooks/useSearchProducts'
+import { formatCurrency } from 'src/utils/utils'
 
 export default function Header() {
   const { isAuthenticated } = useContext(AppContext)

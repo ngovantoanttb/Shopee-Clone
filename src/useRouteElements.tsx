@@ -7,6 +7,15 @@ import MainLayout from './layouts/MainLayout'
 import CartLayout from './layouts/CartLayout'
 import UserLayout from './pages/User/layouts/UserLayout'
 import RegisterLayout from './layouts/RegisterLayout'
+// import Cart from './pages/Cart'
+// import Login from './pages/Login'
+// import NotFound from './pages/NotFound'
+// import ProductDetail from './pages/ProductDetail'
+// import ProductList from './pages/ProductList'
+// import Register from './pages/Register'
+// import ChangePassword from './pages/User/pages/ChangePassword'
+// import HistoryPurchase from './pages/User/pages/HistoryPurchase'
+// import Profile from './pages/User/pages/Profile'
 
 const Login = lazy(() => import('./pages/Login'))
 const ProductList = lazy(() => import('./pages/ProductList'))
