@@ -4,55 +4,46 @@ import { useMemo, useState } from 'react'
 
 export default function ShopMall() {
   const brands = [
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7r98o-m02qx1cjpd655f',
-    'https://down-vn.img.susercontent.com/file/21c730c26e8d3a6fab107a6ea75c057a',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrd9uw184nw23',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c49exoq6r60f',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c49exoq6r60f',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdd8w0nkmaa8',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c2ih4ogjw444',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrd8xvnhqho26',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdawrhrgrgdf',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdbklywkyq4e',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7r98o-m02qx1cjpd655f',
-    'https://down-vn.img.susercontent.com/file/21c730c26e8d3a6fab107a6ea75c057a',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrd9uw184nw23',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c49exoq6r60f',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c49exoq6r60f',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdd8w0nkmaa8',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c2ih4ogjw444',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrd8xvnhqho26',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdawrhrgrgdf',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdbklywkyq4e',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-m2c2ih4ogjw444',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrd8xvnhqho26',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdawrhrgrgdf',
-    'https://down-vn.img.susercontent.com/file/vn-11134258-7ras8-mcrdbklywkyq4e'
+    '/src/assets/image/logoshop1.jpg',
+    '/src/assets/image/logoshop2.jpg',
+    '/src/assets/image/logoshop3.jpg',
+    '/src/assets/image/logoshop4.jpg',
+    '/src/assets/image/logoshop5.jpg',
+    '/src/assets/image/logoshop6.jpg',
+    '/src/assets/image/logoshop7.jpg',
+    '/src/assets/image/logoshop8.jpg',
+    '/src/assets/image/logoshop9.jpg',
+    '/src/assets/image/logoshop1.jpg',
+    '/src/assets/image/logoshop2.jpg',
+    '/src/assets/image/logoshop3.jpg',
+    '/src/assets/image/logoshop4.jpg',
+    '/src/assets/image/logoshop5.jpg'
+    
   ]
 
   const categories = [
     {
-      img: 'https://down-vn.img.susercontent.com/file/3854ad0615cfa2d15eb06a446816465d',
+      img: '/src/assets/image/deal1.png',
       title: 'FREESHIP & HOÀN XU…',
       price: 'Từ 19.800đ'
     },
     {
-      img: 'https://down-vn.img.susercontent.com/file/f05c3231cb59b6d0c233db3ea7a30b8f',
+      img: '/src/assets/image/deal2.png',
       title: 'SHOP XU HƯỚNG',
       price: 'Từ 2.000đ'
     },
     {
-      img: 'https://down-vn.img.susercontent.com/file/40ccf6a1162d77a99cd703885034d631',
+      img: '/src/assets/image/deal3.png',
       title: 'HÀNG QUỐC TẾ',
       price: 'Từ 9.196đ'
     },
     {
-      img: 'https://down-vn.img.susercontent.com/file/19b560edefa4b6869c0eac2f979c9f64',
+      img: '/src/assets/image/deal4.png',
       title: 'SHOPEE MALL',
       price: 'Từ 4.000đ'
     },
     {
-      img: 'https://down-vn.img.susercontent.com/file/f4499fa8d8fec743f8d8b2e63a973e79',
+      img: '/src/assets/image/deal5.png',
       title: 'SHOP HÀNG XƯỞNG',
       price: 'Từ 5.000đ'
     }

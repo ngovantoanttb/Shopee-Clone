@@ -28,11 +28,13 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import ModalPopup from 'src/components/ModalPopup'
 import { keyBy } from 'lodash'
+import { useRequireAuth } from 'src/hooks/useRequireAuth'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
   const queryClient = useQueryClient()
   const { nameId } = useParams()
+  const { requireAuth } = useRequireAuth()
   const id = getIdFromNameId(nameId as string)
   const { isAuthenticated } = useContext(AppContext)
   const { data: productDetailData } = useQuery({
@@ -157,53 +159,57 @@ export default function ProductDetail() {
   }
 
   const addToCart = () => {
-    if (!product) return
+    requireAuth(() => {
+      if (!product) return
 
-    // Tính tổng số lượng sẽ có sau khi thêm
-    const totalQuantity = getCurrentBuyCountInCart + buyCount
+      // Tính tổng số lượng sẽ có sau khi thêm
+      const totalQuantity = getCurrentBuyCountInCart + buyCount
 
-    // Kiểm tra nếu vượt quá số lượng hàng có sẵn
-    if (totalQuantity > product.quantity) {
-      setIsOpenQuantityModal(true)
-      return
-    }
-
-    // Nếu không vượt quá, thêm vào giỏ hàng
-    addToCartMutation.mutate(
-      { product_id: product._id, buy_count: buyCount },
-      {
-        onSuccess: (response) => {
-          queryClient.invalidateQueries({
-            queryKey: ['purchases', { status: purchasesStatus.inCart }]
-          })
-          toast.success(response?.data?.message)
-        }
+      // Kiểm tra nếu vượt quá số lượng hàng có sẵn
+      if (totalQuantity > product.quantity) {
+        setIsOpenQuantityModal(true)
+        return
       }
-    )
+
+      // Nếu không vượt quá, thêm vào giỏ hàng
+      addToCartMutation.mutate(
+        { product_id: product._id, buy_count: buyCount },
+        {
+          onSuccess: (response) => {
+            queryClient.invalidateQueries({
+              queryKey: ['purchases', { status: purchasesStatus.inCart }]
+            })
+            toast.success(response?.data?.message)
+          }
+        }
+      )
+    })
   }
 
-  const buyNow = async () => {
-    if (!product) return
+  const buyNow = () => {
+    requireAuth(async() => {
+      if (!product) return
 
-    // Tính tổng số lượng sẽ có sau khi thêm
-    const totalQuantity = getCurrentBuyCountInCart + buyCount
+      // Tính tổng số lượng sẽ có sau khi thêm
+      const totalQuantity = getCurrentBuyCountInCart + buyCount
 
-    // Kiểm tra nếu vượt quá số lượng hàng có sẵn
-    if (totalQuantity > product.quantity) {
-      setIsOpenQuantityModal(true)
-      return
-    }
-
-    // Nếu không vượt quá, thêm vào giỏ hàng và chuyển đến trang cart
-    const res = await addToCartMutation.mutateAsync({
-      product_id: product._id,
-      buy_count: buyCount
-    })
-    const purchase = res.data.data
-    navigate(path.cart, {
-      state: {
-        purchaseId: purchase._id
+      // Kiểm tra nếu vượt quá số lượng hàng có sẵn
+      if (totalQuantity > product.quantity) {
+        setIsOpenQuantityModal(true)
+        return
       }
+
+      // Nếu không vượt quá, thêm vào giỏ hàng và chuyển đến trang cart
+      const res = await addToCartMutation.mutateAsync({
+        product_id: product._id,
+        buy_count: buyCount
+      })
+      const purchase = res.data.data
+      navigate(path.cart, {
+        state: {
+          purchaseId: purchase._id
+        }
+      })
     })
   }
   if (!product) return null

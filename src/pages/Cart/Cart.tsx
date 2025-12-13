@@ -311,7 +311,7 @@ export default function Cart() {
           <div className='shadow bg-white bottom-0 z-10 sticky mt-6'>
             <div className='flex justify-end items-center py-4 px-5'>
               <div className='flex items-center'>
-                <img src={images.voucher} />
+                <img src={images.voucher} alt='voucher'/>
                 <div className='mx-3.5'>Shopee Voucher</div>
               </div>
               <button className='ml-20 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition duration-150 cursor-pointer'>
@@ -418,7 +418,8 @@ export default function Cart() {
         <div className='mx-auto flex flex-col items-center justify-center min-h-screen py-10'>
           <img
             src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/12fe8880616de161.png'
-            className='w-40 h-40'
+              className='w-40 h-40'
+              alt='Giỏ hàng trống'
           />
           <div className=' text-gray-500 py-5 font-bold'>Giỏ hàng của bạn còn trống</div>
           <Link
