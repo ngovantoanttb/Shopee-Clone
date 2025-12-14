@@ -11,6 +11,7 @@ import images from 'src/assets'
 import { AppContext } from 'src/contexts/app.context'
 import { useContext } from 'react'
 import Button from 'src/components/Button'
+import { Helmet } from 'react-helmet-async'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -62,6 +63,10 @@ export default function Login() {
 
   return (
     <div className='bg-primary'>
+      <Helmet>
+        <title>Đăng nhập | Shopee Clone</title>
+        <meta name='description' content='Đăng nhập vào dự án Shopee Clone' />
+      </Helmet>
       <div className='flex justify-center items-center flex-col'>
         <div className='relative w-[1040px]'>
           <img src={images.login} className='h-[600px] w-[1040px]' alt='Shopee Background' />

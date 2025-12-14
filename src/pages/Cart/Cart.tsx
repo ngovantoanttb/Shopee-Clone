@@ -9,13 +9,13 @@ import QuantityController from 'src/components/QuantityController'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import { Purchase } from 'src/types/purchases.type'
-import { formatCurrency } from 'src/types/utils.type'
-import { generateNameId } from 'src/utils/utils'
+import { formatCurrency, generateNameId } from 'src/utils/utils'
 import { produce } from 'immer'
 import keyBy from 'lodash/keyBy'
 import { toast } from 'react-toastify'
 import ModalPopup from 'src/components/ModalPopup'
 import { AppContext } from 'src/contexts/app.context'
+import { Helmet } from 'react-helmet-async'
 
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false)
@@ -157,6 +157,10 @@ export default function Cart() {
   }
   return (
     <div className='bg-gray-100 text-sm'>
+      <Helmet>
+        <title>Giỏ hàng | Shopee Clone</title>
+        <meta name='description' content='Giỏ hàng của bạn' />
+      </Helmet>
       {purchasesInCartData?.data.data.length !== 0 ? (
         <div className='max-w-6xl mx-auto pt-6 pb-20'>
           <div className='flex items-center py-4 px-5 mb-2 bg-white text-gray-600 text-sm shadow'>
@@ -311,7 +315,7 @@ export default function Cart() {
           <div className='shadow bg-white bottom-0 z-10 sticky mt-6'>
             <div className='flex justify-end items-center py-4 px-5'>
               <div className='flex items-center'>
-                <img src={images.voucher} alt='voucher'/>
+                <img src={images.voucher} alt='voucher' />
                 <div className='mx-3.5'>Shopee Voucher</div>
               </div>
               <button className='ml-20 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition duration-150 cursor-pointer'>
@@ -418,8 +422,8 @@ export default function Cart() {
         <div className='mx-auto flex flex-col items-center justify-center min-h-screen py-10'>
           <img
             src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/12fe8880616de161.png'
-              className='w-40 h-40'
-              alt='Giỏ hàng trống'
+            className='w-40 h-40'
+            alt='Giỏ hàng trống'
           />
           <div className=' text-gray-500 py-5 font-bold'>Giỏ hàng của bạn còn trống</div>
           <Link

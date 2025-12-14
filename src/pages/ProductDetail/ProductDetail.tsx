@@ -28,6 +28,8 @@ import { AppContext } from 'src/contexts/app.context'
 import ModalPopup from 'src/components/ModalPopup'
 import { keyBy } from 'lodash'
 import { useRequireAuth } from 'src/hooks/useRequireAuth'
+import { convert } from 'html-to-text'
+import { Helmet } from 'react-helmet-async'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
@@ -215,6 +217,17 @@ export default function ProductDetail() {
 
   return (
     <div className=' bg-gray-100'>
+      <Helmet>
+        <title>{product.name} | Shopee Clone</title>
+        <meta
+          name='description'
+          content={convert(product.name, {
+            limits: {
+              maxInputLength: 150
+            }
+          })}
+        />
+      </Helmet>
       <div className='pt-4 max-w-6xl mx-auto pb-20 text-sm'>
         <div className='bg-white shadow-md'>
           <div className='flex'>

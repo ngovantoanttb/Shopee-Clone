@@ -11,6 +11,7 @@ import { ErrorResponse } from 'src/types/utils.type'
 import images from 'src/assets'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
+import { Helmet } from 'react-helmet'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
@@ -59,6 +60,10 @@ export default function Register() {
 
   return (
     <div className='bg-primary'>
+      <Helmet>
+        <title>Đăng ký | Shopee Clone</title>
+        <meta name='description' content='Đăng ký vào dự án Shopee Clone' />
+      </Helmet>
       <div className='flex justify-center items-center flex-col'>
         <div className='relative w-[1040px]'>
           <img src={images.banner} className='h-[600px] w-[1040px]' alt='Shopee Background' />

@@ -5,6 +5,8 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { localStorageEventTarget } from './utils/auth'
 import { AppContext } from './contexts/app.context'
+import { HelmetProvider } from 'react-helmet-async'
+import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   const routeElements = useRouteElements()
@@ -40,20 +42,22 @@ function App() {
     }, 15)
   }
   return (
-    <div>
-      {routeElements}
-      <ToastContainer />
-      {/* Nút scroll to top với hiệu ứng mượt mà */}
-      <button
-        onClick={scrollToTop}
-        className={`cursor-pointer fixed bottom-8 right-4 bg-primary/95 hover:bg-primary/100 text-white p-3 rounded-sm shadow-lg 
-    transition-all duration-500 ease-in-out transform hover:scale-110
-    ${showScrollTop ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-20'}`}
-        aria-label='Quay lại đầu trang'
-      >
-        <FontAwesomeIcon icon={faArrowUp} />
-      </button>
-    </div>
+    <HelmetProvider>
+      <ErrorBoundary>
+        {routeElements}
+        <ToastContainer />
+        {/* Nút scroll to top với hiệu ứng mượt mà */}
+        <button
+          onClick={scrollToTop}
+          className={`cursor-pointer fixed bottom-8 right-4 bg-primary/95 hover:bg-primary/100 text-white p-3 rounded-sm shadow-lg 
+        transition-all duration-500 ease-in-out transform hover:scale-110
+        ${showScrollTop ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-20'}`}
+          aria-label='Quay lại đầu trang'
+        >
+          <FontAwesomeIcon icon={faArrowUp} />
+        </button>
+      </ErrorBoundary>
+    </HelmetProvider>
   )
 }
 

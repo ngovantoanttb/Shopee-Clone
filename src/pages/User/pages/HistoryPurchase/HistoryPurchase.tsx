@@ -1,7 +1,8 @@
-import { faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
 import classNames from 'classnames'
+import { Helmet } from 'react-helmet-async'
 import { createSearchParams, Link } from 'react-router-dom'
 import purchaseApi from 'src/apis/purchases.api'
 import images from 'src/assets'
@@ -9,8 +10,7 @@ import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import useQueryParams from 'src/hooks/useQueryParams'
 import { PurchaseListStatus } from 'src/types/purchases.type'
-import { formatCurrency } from 'src/types/utils.type'
-import { generateNameId } from 'src/utils/utils'
+import { formatCurrency, generateNameId } from 'src/utils/utils'
 
 const purchasesTabs = [
   {
@@ -49,7 +49,6 @@ export default function HistoryPurchase() {
   })
 
   const purchasesInCart = purchasesInCartData?.data.data
-  console.log(purchasesInCart)
 
   const purchasesTabsLink = purchasesTabs.map((tab, index) => (
     <Link
@@ -71,6 +70,10 @@ export default function HistoryPurchase() {
 
   return (
     <div>
+      <Helmet>
+        <title>Shopee | Mua và bán online</title>
+        <meta name='description' content='Shopee Mua bán online' />
+      </Helmet>
       <div className='sticky top-0 flex items-center justify-between pt-4 text-base font-medium text-gray-700 bg-white z-50'>
         {purchasesTabsLink}
       </div>

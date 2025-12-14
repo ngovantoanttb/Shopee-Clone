@@ -18,6 +18,7 @@ import { INVALID_AVATAR_URL } from 'src/assets'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponse } from 'src/types/utils.type'
 import InputFile from 'src/components/InputFile'
+import { Helmet } from 'react-helmet-async'
 
 function Info() {
   const {
@@ -162,6 +163,10 @@ export default function Profile() {
 
   return (
     <div className='px-7 text-sm pb-10 bg-white shadow'>
+      <Helmet>
+        <title>Shopee | Mua và bán online</title>
+        <meta name='description' content='Shopee Mua bán online' />
+      </Helmet>
       <div className='py-5.5 border-b border-gray-200'>
         <div className='text-lg '>Hồ Sơ Của Tôi</div>
         <div className='text-gray-500'>Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
