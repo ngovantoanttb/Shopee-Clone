@@ -5,16 +5,15 @@ import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type'
 import {
   clearLS,
   getAccessTokenFromLS,
-  getRefeshTokenFromLS,
+  getRefreshTokenFromLS,
   setAccessTokenToLS,
   setProfiletoLS,
   setRefreshTokenToLS
 } from './auth'
 import config from 'src/constants/config'
-import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN } from 'src/apis/auth.api'
+import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from './utils'
 import { ErrorResponse } from 'src/types/utils.type'
-
 
 // Purchase: 1 - 3
 // Me: 2 - 5
@@ -23,17 +22,16 @@ import { ErrorResponse } from 'src/types/utils.type'
 // Refresh Token mới cho me: 5 - 6
 // Gọi lại Me: 6
 
-
 class Http {
   instance: AxiosInstance
   private accessToken: string
-  private refeshToken: string
+  private refreshToken: string
   private refreshTokenRequest: Promise<string> | null
 
   constructor() {
     // Khởi tạo và lấy một lần khi F5
     this.accessToken = getAccessTokenFromLS()
-    this.refeshToken = getRefeshTokenFromLS()
+    this.refreshToken = getRefreshTokenFromLS()
     this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: config.baseURL,
@@ -64,13 +62,17 @@ class Http {
         if (url === URL_LOGIN) {
           const data = response.data as AuthResponse
           this.accessToken = (response.data as AuthResponse).data.access_token
+          this.refreshToken = (response.data as AuthResponse).data.refresh_token
           setAccessTokenToLS(this.accessToken)
-          setRefreshTokenToLS(this.refeshToken)
+          setRefreshTokenToLS(this.refreshToken)
           setProfiletoLS(data.data.user)
           toast.success((response.data as AuthResponse).message)
-        } else if (url === URL_LOGOUT) {
+        } else if (url === URL_REGISTER) {
+          toast.success((response.data as AuthResponse).message)
+        }
+        if (url === URL_LOGOUT) {
           this.accessToken = ''
-          this.refeshToken = ''
+          this.refreshToken = ''
           clearLS()
           toast.success((response.data as AuthResponse)?.message)
         }
@@ -105,7 +107,7 @@ class Http {
             // Hạn chế gọi 2 lần handleRefreshToken
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
-              : this.handleRefeshToken().finally(() => {
+              : this.handleRefreshToken().finally(() => {
                   // Giữ RefreshTokenRequest trong 10s cho những request tiếp theo nếu có lỗi 401 thì dừng
                   setTimeout(() => {
                     this.refreshTokenRequest = null
@@ -124,7 +126,7 @@ class Http {
 
           clearLS()
           this.accessToken = ''
-          this.refeshToken = ''
+          this.refreshToken = ''
           toast.error(error.response?.data.data?.message || error.response?.data.message)
           // window.location.reload()
         }
@@ -133,10 +135,10 @@ class Http {
     )
   }
 
-  private handleRefeshToken() {
+  private handleRefreshToken() {
     return this.instance
       .post<RefreshTokenResponse>('/refresh-token', {
-        refresh_token: this.refeshToken
+        refresh_token: this.refreshToken
       })
       .then((res) => {
         const { access_token } = res.data.data

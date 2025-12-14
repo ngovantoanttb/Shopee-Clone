@@ -152,6 +152,7 @@ export default function Profile() {
               type: 'Server'
             })
           })
+          toast.error('Có lỗi xảy ra khi cập nhật ảnh')
         }
       }
     }

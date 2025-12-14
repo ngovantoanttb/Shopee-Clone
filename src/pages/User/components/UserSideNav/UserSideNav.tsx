@@ -19,7 +19,7 @@ export default function UserSideNav() {
         )}
 
         <div className='ml-4'>
-          <div className='font-bold'>
+          <div className='font-bold truncate w-28 line-clamp-1'>
             {profile?.name ? profile.name : `user` + Math.floor(1000000000 + Math.random() * 9000000000)}
           </div>
           <Link to={path.profile} className='text-gray-400'>
